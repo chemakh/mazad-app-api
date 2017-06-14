@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: mazad-auth-service
+  cloud:
+    config:
+      uri: http://localhost:1212
+      fail-fast: true
+      username: mazaduser
+      password: QYTJDc85

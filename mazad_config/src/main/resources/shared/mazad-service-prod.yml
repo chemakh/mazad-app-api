@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: Mazad_Service_prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
+    name:
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  sleuth.sampler.percentage: 0.5
+
+flyway:
+  baseline-on-migrate: true
+  baseline-version: 0
+  encoding: UTF-8
+  validate-on-migrate: false
+  locations: classpath:db/prod/migration
+
+security:
+  oauth2:
+    resource:
+      userInfoUri: http://localhost:7777/auth/user/current
+    client:
+      clientId: mazad-service
+      clientSecret: mazad-service-secret
+      accessTokenUri: http://localhost:7777/auth/oauth/token
+      userAuthorizationUri: http://localhost:7777/auth/oauth/authorize
+      grant-type: client_credentials
+      scope: server
+
+server:
+    port: 8181
+hystrix:
+  threadpool.default:
+    coreSize: 20
+    maxQueueSize: 500000
+    keepAliveTimeMinutes: 2
+    queueSizeRejectionThreshold: 500000
+  command.default:
+    fallback.isolation.semaphore.maxConcurrentRequests: 20
+    execution:
+      timeout.enabled: false
+      isolation:
+        strategy: THREAD
+        thread.timeoutInMilliseconds: 60000
+
+logging:
+  level:
+    org:
+      hibernate.SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
+# ===================================================================
+mazad:
+  feign:
+    communication: http://localhost:6060/ws
+    auth : http://localhost:7777/auth/
+    medicalpartner: http://localhost:7080/ws
+    service: http://localhost:8181/ws
+
+  photo:
+    path: /home/ubuntu/workspace/agendastorage/
+    url: http://83.166.136.134/agendastorage

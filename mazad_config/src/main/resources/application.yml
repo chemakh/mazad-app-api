@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/shared
+  profiles:
+     active: native
+
+server:
+  port: 1212
+security:
+    basic:
+      enabled: true
+    user:
+      name: mazaduser
+      password: QYTJDc85

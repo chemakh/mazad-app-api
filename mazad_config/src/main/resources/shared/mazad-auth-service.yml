@@ -1,0 +1,29 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: false
+  jpa:
+    database: MYSQL
+    show_sql: false
+    hibernate:
+      ddl-auto : update
+    properties:
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+      hibernate.dialect : org.hibernate.dialect.MySQL5Dialect
+  jmx:
+      default-domain: ${spring.application.name}
+  zipkin.baseUrl: http://localhost:8085/
+
+# ===================================================================
+# Mazad specific properties
+# ===================================================================
+mazad:
+  security:
+   authentication:
+    oauth:
+      jwtKeystoreSecret : mazadkey

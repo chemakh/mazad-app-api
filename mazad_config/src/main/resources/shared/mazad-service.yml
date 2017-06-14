@@ -1,0 +1,98 @@
+spring:
+  application:
+    name: Mazad_Service_dev
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: false
+  jpa:
+    database: MYSQL
+    show_sql: false
+    hibernate:
+      ddl-auto : update
+    properties:
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+      hibernate.dialect : org.hibernate.dialect.MySQL5Dialect
+  data:
+    elasticsearch:
+      cluster-name: technetmedia
+      cluster-nodes: localhost:9300
+  jmx:
+    default-domain: ${spring.application.name}
+  messages:
+    basename: i18n/messages
+    cache-seconds: 1
+    always-use-message-format: true
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      reply-timeout: 20000 # Timeout for `sendAndReceive()` methods.
+      mandatory: true
+      retry:
+        enabled: true # Set to true to enable retries in the `RabbitTemplate`.
+        initial-interval: 1000 # Interval between the first and second attempt to publish a message.
+        max-attempts: 3 # Maximum number of attempts to publish a message.
+        max-interval: 10000 # Maximum number of attempts to publish a message.
+        multiplier: 10.0 # A multiplier to apply to the previous publishing retry interval.
+    listener:
+  #        acknowledge-mode: MANUAL
+      retry:
+        enabled: true # Whether or not publishing retries are enabled.
+        initial-interval: 500 # Interval between the first and second attempt to deliver a message.
+        max-attempts: 3 # Maximum number of attempts to deliver a message.
+        max-interval: 10000 # Maximum interval between attempts.
+        multiplier: 10.0 # A multiplier to apply to the previous delivery retry interval.
+  zipkin.baseUrl: http://localhost:8085/
+
+hystrix:
+  threadpool.default:
+    coreSize: 20
+    maxQueueSize: 500000
+    keepAliveTimeMinutes: 2
+    queueSizeRejectionThreshold: 500000
+  command.default:
+    fallback.isolation.semaphore.maxConcurrentRequests: 20
+    execution:
+      timeout.enabled: false
+      isolation:
+        strategy: THREAD
+        thread.timeoutInMilliseconds: 60000
+
+# ===================================================================
+# mazad specific properties
+# ===================================================================
+
+mazad:
+
+  swagger:
+    title: mazad service  API
+    description: mazad Service API documentation
+    version: 0.0.1
+    termsOfServiceUrl:
+    contactName:
+    contactUrl:
+    contactEmail:
+    license: Apache 2.0
+    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0
+
+  admin:
+    email: lchemakh@starit.fr
+    name: Administrateur
+
+  security:
+      authentication:
+        oauth:
+          clientid: mazad
+          secret: mazadsecret
+          scope:  read write
+          grant_type : password
+          grant_type_refresh : refresh_token
+  yandex.translate.api.key: trnsl.1.1.20170328T133655Z.dc833bf21ad3c9db.3c4b93d59d48e40b18293c0dbaeab0ac79743bb2

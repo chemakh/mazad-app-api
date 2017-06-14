@@ -1,0 +1,33 @@
+server:
+    port: 7777
+    contextPath: /auth
+
+logging:
+    level:
+        org:
+            hibernate.SQL: DEBUG
+            type.descriptor.sql.BasicBinder: TRACE
+            springframework.security: DEBUG
+
+spring:
+    application:
+        name: Mazad_AuthServer__prod
+    datasource:
+        url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
+        name:
+        username: root
+        password: root
+        type: com.zaxxer.hikari.HikariDataSource
+        hikari:
+            connection-timeout: 60000
+            maximum-pool-size: 5
+            data-source-properties:
+              cachePrepStmts: true
+              prepStmtCacheSize: 250
+              prepStmtCacheSqlLimit: 2048
+              useServerPrepStmts: true
+    sleuth.sampler.percentage: 0.2
+
+# ===================================================================
+# mazad specific properties
+# ===================================================================
