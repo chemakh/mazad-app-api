@@ -1,7 +1,5 @@
 package ch.com.mazad.security;
 
-import ch.com.mazad.domain.Authority;
-import ch.com.mazad.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,27 +33,27 @@ public final class SecurityUtils {
     }
 
 
-    public static boolean isCurrentUserInRole(User user, String authority) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
+//    public static boolean isCurrentUserInRole(User user, String authority) {
+//        SecurityContext securityContext = SecurityContextHolder.getContext();
+//        Authentication authentication = securityContext.getAuthentication();
+//
+//        return authentication != null && user.getAuthorities().contains(new Authority(authority));
+//
+//    }
 
-        return authentication != null && user.getAuthorities().contains(new Authority(authority));
-
-    }
-
-    public static boolean isDoctor(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.DOCTOR);
-    }
-
-    public static boolean isAdmin(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ADMIN);
-    }
-
-    public static boolean isAssistantDoctor(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_DOCTOR);
-    }
-
-    public static boolean isAssistantAdmin(User user) {
-        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_ADMIN);
-    }
+//    public static boolean isDoctor(User user) {
+//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.DOCTOR);
+//    }
+//
+//    public static boolean isAdmin(User user) {
+//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ADMIN);
+//    }
+//
+//    public static boolean isAssistantDoctor(User user) {
+//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_DOCTOR);
+//    }
+//
+//    public static boolean isAssistantAdmin(User user) {
+//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_ADMIN);
+//    }
 }

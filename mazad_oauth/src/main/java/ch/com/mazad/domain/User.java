@@ -19,12 +19,6 @@ import java.util.stream.Collectors;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User implements UserDetails
 {
-    private static final long serialVersionUID = 1L;
-
-    public User()
-    {
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

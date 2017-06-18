@@ -1,0 +1,92 @@
+package ch.com.mazad.domain;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+/**
+ * Created by Chemakh on 18/06/2017.
+ */
+
+@Entity
+@Table(indexes = {@Index(name = "index_bid_reference", columnList = "reference", unique = true)})
+public class Bid implements Serializable
+{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(unique = true)
+    private String reference;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "article_id")
+    private Article article;
+
+    private BigDecimal initialPrice;
+
+    private BigDecimal bidAmount;
+
+    private BigDecimal finalPrice;
+
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
+
+    public String getReference()
+    {
+        return reference;
+    }
+
+    public void setReference(String reference)
+    {
+        this.reference = reference;
+    }
+
+    public Article getArticle()
+    {
+        return article;
+    }
+
+    public void setArticle(Article article)
+    {
+        this.article = article;
+    }
+
+    public BigDecimal getInitialPrice()
+    {
+        return initialPrice;
+    }
+
+    public void setInitialPrice(BigDecimal initialPrice)
+    {
+        this.initialPrice = initialPrice;
+    }
+
+    public BigDecimal getBidAmount()
+    {
+        return bidAmount;
+    }
+
+    public void setBidAmount(BigDecimal bidAmount)
+    {
+        this.bidAmount = bidAmount;
+    }
+
+    public BigDecimal getFinalPrice()
+    {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(BigDecimal finalPrice)
+    {
+        this.finalPrice = finalPrice;
+    }
+}

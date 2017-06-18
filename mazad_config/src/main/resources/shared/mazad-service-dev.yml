@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
     name:
     username: root
-    password: root
+    password: root1234
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-timeout: 60000
@@ -52,7 +52,6 @@ mazad:
   feign:
     auth : http://localhost:7777/auth/
     service: http://localhost:8181/ws
-
   photo:
     path: /Users/technetmedia_khaled/projets/agendastorage
     url: http://192.168.1.2/agendastorage
