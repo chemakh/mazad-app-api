@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
     name:
     username: root
-    password: root1234
+    password: root
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-timeout: 60000
@@ -17,7 +17,7 @@ spring:
   sleuth.sampler.percentage: 1.0
 
 flyway:
-  enabled: false
+  enabled: true
   baseline-on-migrate: true
   baseline-version: 0
   encoding: UTF-8

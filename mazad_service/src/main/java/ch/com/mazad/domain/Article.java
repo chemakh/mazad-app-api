@@ -41,12 +41,6 @@ public class Article implements Serializable
 
     private boolean sold;
 
-    private LocalDateTime soldDate;
-
-    private User soldBy;
-
-    private BigDecimal soldPrice;
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "avatar_id")
     private Photo avatar;
@@ -154,36 +148,6 @@ public class Article implements Serializable
     public void setSold(boolean sold)
     {
         this.sold = sold;
-    }
-
-    public LocalDateTime getSoldDate()
-    {
-        return soldDate;
-    }
-
-    public void setSoldDate(LocalDateTime soldDate)
-    {
-        this.soldDate = soldDate;
-    }
-
-    public User getSoldBy()
-    {
-        return soldBy;
-    }
-
-    public void setSoldBy(User soldBy)
-    {
-        this.soldBy = soldBy;
-    }
-
-    public BigDecimal getSoldPrice()
-    {
-        return soldPrice;
-    }
-
-    public void setSoldPrice(BigDecimal soldPrice)
-    {
-        this.soldPrice = soldPrice;
     }
 
     public Photo getAvatar()
