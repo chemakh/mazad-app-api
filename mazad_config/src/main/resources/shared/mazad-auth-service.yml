@@ -26,4 +26,4 @@ mazad:
   security:
    authentication:
     oauth:
-      jwtKeystoreSecret : mazadkey
+      jwtKeystoreSecret : happyHourskey

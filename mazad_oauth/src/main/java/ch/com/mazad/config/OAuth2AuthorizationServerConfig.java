@@ -38,9 +38,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     private UserDetailsServiceImpl userDetailsService;
     @Bean
     protected JwtAccessTokenConverter jwtTokenEnhancer() {
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("agenda.jks"), jwtConverterKeystoreSecret.toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("happy-hours.jks"), jwtConverterKeystoreSecret.toCharArray());
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("jwt"));
+        converter.setKeyPair(keyStoreKeyFactory.getKeyPair("happy-hours"));
         return converter;
     }
 

@@ -3,6 +3,8 @@ package ch.com.mazad.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by Chemakh on 18/06/2017.
@@ -88,5 +90,21 @@ public class Bid implements Serializable
     public void setFinalPrice(BigDecimal finalPrice)
     {
         this.finalPrice = finalPrice;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return Optional.ofNullable(object).filter(obj -> obj instanceof Bid).map(obj -> (Bid) obj).
+                filter(ts -> this.reference == null || Objects.equals(ts.getReference(), this.reference)).
+                filter(ts -> this.reference != null || Objects.equals(ts, this)).
+                isPresent();
+    }
+
+    @Override
+    public int hashCode() {
+        if (this.getReference() != null)
+            return this.getReference().hashCode();
+        else
+            return super.hashCode();
     }
 }

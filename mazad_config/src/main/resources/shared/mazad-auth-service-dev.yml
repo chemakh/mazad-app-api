@@ -14,7 +14,6 @@ spring:
         name: Mazad_AuthServer_dev
     datasource:
         url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
-        name:
         username: root
         password: root
         type: com.zaxxer.hikari.HikariDataSource

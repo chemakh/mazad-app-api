@@ -2,6 +2,8 @@ package ch.com.mazad.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by Chemakh on 18/06/2017.
@@ -74,5 +76,21 @@ public class Photo implements Serializable
     public void setArticle(Article article)
     {
         this.article = article;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return Optional.ofNullable(object).filter(obj -> obj instanceof Photo).map(obj -> (Photo) obj).
+                filter(ts -> this.reference == null || Objects.equals(ts.getReference(), this.reference)).
+                filter(ts -> this.reference != null || Objects.equals(ts, this)).
+                isPresent();
+    }
+
+    @Override
+    public int hashCode() {
+        if (this.getReference() != null)
+            return this.getReference().hashCode();
+        else
+            return super.hashCode();
     }
 }

@@ -15,6 +15,6 @@ create table IF NOT EXISTS oauth_client_details (
 INSERT INTO oauth_client_details
 	(client_id, client_secret, scope, authorized_grant_types,access_token_validity)
 VALUES
-	("mazad", "mazadesecret", "read,write","authorization_code,refresh_token,password,implicit", 3600),
+	("mazad", "mazadsecret", "read,write","authorization_code,refresh_token,password,implicit", 3600),
 	("mazad-communication", "mazad-communication-secret", "server","client_credentials,refresh_token", null),
 	("mazad-service", "mazad-service-secret", "server","client_credentials,refresh_token", null);

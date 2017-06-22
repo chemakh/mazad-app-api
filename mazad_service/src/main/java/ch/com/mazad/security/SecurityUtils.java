@@ -31,29 +31,4 @@ public final class SecurityUtils {
         }
         return userName;
     }
-
-
-//    public static boolean isCurrentUserInRole(User user, String authority) {
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        Authentication authentication = securityContext.getAuthentication();
-//
-//        return authentication != null && user.getAuthorities().contains(new Authority(authority));
-//
-//    }
-
-//    public static boolean isDoctor(User user) {
-//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.DOCTOR);
-//    }
-//
-//    public static boolean isAdmin(User user) {
-//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ADMIN);
-//    }
-//
-//    public static boolean isAssistantDoctor(User user) {
-//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_DOCTOR);
-//    }
-//
-//    public static boolean isAssistantAdmin(User user) {
-//        return SecurityUtils.isCurrentUserInRole(user, AuthoritiesConstants.ASSISTANT_ADMIN);
-//    }
 }

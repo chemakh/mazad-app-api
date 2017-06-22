@@ -1,37 +1,29 @@
-package ch.com.mazad.domain;
+package ch.com.mazad.web.dto;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 /**
  * Created by Chemakh on 18/06/2017.
  */
-
-@Entity
-@Table(indexes = {@Index(name = "index_article_reference", columnList = "reference", unique = true)})
-public class Article implements Serializable
+public class ArticleDTO implements Serializable
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(unique = true)
     private String reference;
 
+    @NotNull
+    @Size(min = 2,max = 255)
     private String label;
 
+    @NotNull
+    @Size(min = 2,max = 255)
     private String description;
 
-    private User createdBy;
+    private String createdByUserReference;
 
     private LocalDateTime creationDate;
 
@@ -43,24 +35,9 @@ public class Article implements Serializable
 
     private boolean sold;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "avatar_id")
-    private Photo avatar;
+    private PhotoDTO avatar;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "article_id")
-    @Fetch(FetchMode.SUBSELECT)
-    private Set<Photo> photos = new HashSet<>();
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+    private Set<PhotoDTO> photos = new HashSet<>();
 
     public String getReference()
     {
@@ -92,14 +69,12 @@ public class Article implements Serializable
         this.description = description;
     }
 
-    public User getCreatedBy()
-    {
-        return createdBy;
+    public String getCreatedByUserReference() {
+        return createdByUserReference;
     }
 
-    public void setCreatedBy(User createdBy)
-    {
-        this.createdBy = createdBy;
+    public void setCreatedByUserReference(String createdByUserReference) {
+        this.createdByUserReference = createdByUserReference;
     }
 
     public LocalDateTime getCreationDate()
@@ -152,39 +127,23 @@ public class Article implements Serializable
         this.sold = sold;
     }
 
-    public Photo getAvatar()
+    public PhotoDTO getAvatar()
     {
         return avatar;
     }
 
-    public void setAvatar(Photo avatar)
+    public void setAvatar(PhotoDTO avatar)
     {
         this.avatar = avatar;
     }
 
-    public Set<Photo> getPhotos()
+    public Set<PhotoDTO> getPhotos()
     {
         return photos;
     }
 
-    public void setPhotos(Set<Photo> photos)
+    public void setPhotos(Set<PhotoDTO> photos)
     {
         this.photos = photos;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        return Optional.ofNullable(object).filter(obj -> obj instanceof Article).map(obj -> (Article) obj).
-                filter(ts -> this.reference == null || Objects.equals(ts.getReference(), this.reference)).
-                filter(ts -> this.reference != null || Objects.equals(ts, this)).
-                isPresent();
-    }
-
-    @Override
-    public int hashCode() {
-        if (this.getReference() != null)
-            return this.getReference().hashCode();
-        else
-            return super.hashCode();
     }
 }

@@ -1,7 +1,17 @@
 package ch.com.mazad.domain;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by Chemakh on 18/06/2017.
@@ -41,7 +51,7 @@ public class User implements Serializable
     private String resetPasswordKey;
 
     @Column(name = "is_mail_verified", columnDefinition = "tinyint(1) default 0")
-    private boolean isMailVerified = false;
+    private boolean mailVerified = false;
 
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
@@ -50,6 +60,19 @@ public class User implements Serializable
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "avatar_id")
     private Photo avatar;
+
+    private boolean deleted;
+
+    private LocalDateTime deletionDate;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Authority> authorities = new HashSet<>();
 
     public Long getId()
     {
@@ -151,14 +174,12 @@ public class User implements Serializable
         this.resetPasswordKey = resetPasswordKey;
     }
 
-    public boolean isMailVerified()
-    {
-        return isMailVerified;
+    public boolean isMailVerified() {
+        return mailVerified;
     }
 
-    public void setMailVerified(boolean mailVerified)
-    {
-        isMailVerified = mailVerified;
+    public void setMailVerified(boolean mailVerified) {
+        this.mailVerified = mailVerified;
     }
 
     public Sex getSex()
@@ -179,5 +200,45 @@ public class User implements Serializable
     public void setAvatar(Photo avatar)
     {
         this.avatar = avatar;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public LocalDateTime getDeletionDate() {
+        return deletionDate;
+    }
+
+    public void setDeletionDate(LocalDateTime deletionDate) {
+        this.deletionDate = deletionDate;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return Optional.ofNullable(object).filter(obj -> obj instanceof User).map(obj -> (User) obj).
+                filter(ts -> this.reference == null || Objects.equals(ts.getReference(), this.reference)).
+                filter(ts -> this.reference != null || Objects.equals(ts, this)).
+                isPresent();
+    }
+
+    @Override
+    public int hashCode() {
+        if (this.getReference() != null)
+            return this.getReference().hashCode();
+        else
+            return super.hashCode();
     }
 }

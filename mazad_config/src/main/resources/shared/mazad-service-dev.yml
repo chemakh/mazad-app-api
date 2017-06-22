@@ -27,7 +27,7 @@ flyway:
 security:
   oauth2:
     resource:
-      userInfoUri: http://localhost:7777/uaa/user/current
+      userInfoUri: http://localhost:7777/auth/user/current
     client:
       clientId: mazad-service
       clientSecret: mazad-service-secret

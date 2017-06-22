@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by Chemakh on 18/06/2017.
@@ -100,5 +102,21 @@ public class Sale implements Serializable
     public void setSoldPrice(BigDecimal soldPrice)
     {
         this.soldPrice = soldPrice;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        return Optional.ofNullable(object).filter(obj -> obj instanceof Sale).map(obj -> (Sale) obj).
+                filter(ts -> this.reference == null || Objects.equals(ts.getReference(), this.reference)).
+                filter(ts -> this.reference != null || Objects.equals(ts, this)).
+                isPresent();
+    }
+
+    @Override
+    public int hashCode() {
+        if (this.getReference() != null)
+            return this.getReference().hashCode();
+        else
+            return super.hashCode();
     }
 }
