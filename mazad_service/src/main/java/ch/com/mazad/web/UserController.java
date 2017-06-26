@@ -20,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 @Api(value = "user", description = "Operations with user", produces = "application/json")
 @RestController
@@ -37,7 +38,7 @@ public class UserController {
     @Value("${mazad.security.authentication.oauth.grant_type}")
     private String grantType;
 
-    @Value("${agenda.security.authentication.oauth.scope}")
+    @Value("${mazad.security.authentication.oauth.scope}")
     private String scope;
 
     @Inject
@@ -50,7 +51,7 @@ public class UserController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Authentification Service")
+    @ApiOperation(value = "Authentication Service")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Operation Executed Successfully"),
             @ApiResponse(code = 400, message = "Bad credentials")
@@ -74,6 +75,59 @@ public class UserController {
         ResponseEntity<JSONObject> responseEntity = restCLientCallback.refreshToken(oauthClientSecret, oauthClientId, "refresh_token", token);
         return responseEntity.getBody();
     }
+
+    @RequestMapping(value = "/",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Create User Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
+            @ApiResponse(code = 400, message = "Validation Error, Database conflict"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) throws MazadException
+    {
+
+        return userService.createUser(userDTO);
+    }
+
+    @RequestMapping(value = "/",
+            method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update User Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
+            @ApiResponse(code = 400, message = "Validation Error, Database conflict"),
+            @ApiResponse(code = 404, message = "Object with Ref not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+
+    })
+    public UserDTO updateUser(@Valid @RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException
+    {
+
+        return userService.updateUser(userDTO, reference);
+    }
+
+    @RequestMapping(value = "/",
+            method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete User Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
+            @ApiResponse(code = 404, message = "User with Ref not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public JSONObject deleteUser(@RequestParam("reference") String reference) throws MazadException {
+
+        return userService.deleteUser(reference);
+    }
+
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/activate",

@@ -31,6 +31,10 @@ public abstract class DTOMapper {
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    AddressRepository addressRepository;
+
+
     @Mappings({
             @Mapping(target = "createdByUserReference", source = "article.createdBy.reference")})
     public abstract ArticleDTO fromArticleToDTO(Article article);
@@ -72,6 +76,13 @@ public abstract class DTOMapper {
     })
     public abstract Sale fromDTOToSale(SaleDTO dto);
 
+    public abstract AddressDTO fromAddressToDTO(Address address);
+
+    @Mappings({
+            @Mapping(target = "id", expression = "java(addressRepository.findIdByReference(dto.getReference()).orElse(null))")
+    })
+    public abstract Address fromDTOToAddress(AddressDTO dto);
+
     @Mappings({
             @Mapping(target = "reference", ignore = true),
             @Mapping(target = "password", ignore = true),
@@ -98,6 +109,11 @@ public abstract class DTOMapper {
             @Mapping(target = "reference", ignore = true),
     })
     public abstract void updateArticleFromDto(ArticleDTO dto, @MappingTarget Article article);
+
+    @Mappings({
+            @Mapping(target = "reference", ignore = true),
+    })
+    public abstract void updateAddressFromDto(AddressDTO dto, @MappingTarget Address address);
 
 
 }

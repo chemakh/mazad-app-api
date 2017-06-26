@@ -63,7 +63,8 @@ public class SwaggerConfiguration
                 mazadProperties.getSwagger().getLicenseUrl());
 
         List<ResponseMessage> globalMessages = new ArrayList<>();
-        globalMessages.add(new ResponseMessageBuilder().code(500).message(ErrorConstants.ERR_INTERNAL_SERVER_ERROR).build());
+        globalMessages.add(new ResponseMessageBuilder().code(500).
+                message(ErrorConstants.ERR_INTERNAL_SERVER_ERROR).build());
 
         List<Parameter> parameters = new LinkedList<>();
         parameters.add(new ParameterBuilder()
@@ -86,12 +87,6 @@ public class SwaggerConfiguration
                 .defaultValue("fr")
                 .build());
 
-        //or use this annotation for each operation
-//        @ApiImplicitParams({
-//                @ApiImplicitParam(name = "Authorization", defaultValue = "Bearer",allowMultiple = false,
-//                        required = false, dataType = "string", paramType = "header")
-//        })
-
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
@@ -104,7 +99,7 @@ public class SwaggerConfiguration
                 .forCodeGeneration(true)
                 .genericModelSubstitutes(ResponseEntity.class)
                 .ignoredParameterTypes(Pageable.class)
-                .select().apis(RequestHandlerSelectors.basePackage("ch.com.mazad.web.controller"))
+                .select().apis(RequestHandlerSelectors.basePackage("ch.com.mazad.web"))
                 .paths(regex(DEFAULT_INCLUDE_PATTERN))
                 .build();
         watch.stop();

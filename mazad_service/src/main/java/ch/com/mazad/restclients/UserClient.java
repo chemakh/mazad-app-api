@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "agenda-auth-server", url = "${agenda.feign.auth}")
+@FeignClient(name = "mazad-auth-server", url = "${mazad.feign.auth}")
 public interface UserClient
 {
 

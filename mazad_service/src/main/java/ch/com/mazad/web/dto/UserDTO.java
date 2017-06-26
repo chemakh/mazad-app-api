@@ -16,11 +16,11 @@ public class UserDTO implements Serializable
 {
     @NotNull
     @Size(min = 2,max = 255)
-    private String firstName;
+    private String firstname;
 
     @NotNull
     @Size(min = 2,max = 255)
-    private String lastName;
+    private String lastname;
 
     private String reference;
 
@@ -39,24 +39,24 @@ public class UserDTO implements Serializable
 
     private PhotoDTO avatar;
 
-    public String getFirstName()
+    public String getFirstname()
     {
-        return firstName;
+        return firstname;
     }
 
-    public void setFirstName(String firstName)
+    public void setFirstname(String firstname)
     {
-        this.firstName = firstName;
+        this.firstname = firstname;
     }
 
-    public String getLastName()
+    public String getLastname()
     {
-        return lastName;
+        return lastname;
     }
 
-    public void setLastName(String lastName)
+    public void setLastname(String lastname)
     {
-        this.lastName = lastName;
+        this.lastname = lastname;
     }
 
     public String getReference()
