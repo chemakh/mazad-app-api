@@ -4,6 +4,7 @@ import ch.com.mazad.domain.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,6 +13,11 @@ import java.util.Optional;
 public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     Optional<Article> findOneByReference(String ref);
+
+    List<Article> findByCategoryNameAndDeletedIsFalse(String name);
+
+    List<Article> findByCategoryReference(String reference);
+
 
     @Query(value = "select art.id from article art where art.reference=?1",nativeQuery = true)
     Optional<Long> findIdByReference(String ref);

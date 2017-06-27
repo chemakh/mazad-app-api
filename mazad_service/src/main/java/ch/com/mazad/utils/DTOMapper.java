@@ -20,6 +20,9 @@ public abstract class DTOMapper {
     ArticleRepository articleRepository;
 
     @Inject
+    CategoryRepository categoryRepository;
+
+    @Inject
     BidRepository bidRepository;
 
     @Inject
@@ -36,11 +39,13 @@ public abstract class DTOMapper {
 
 
     @Mappings({
-            @Mapping(target = "createdByUserReference", source = "article.createdBy.reference")})
+            @Mapping(target = "createdByUserReference", source = "article.createdBy.reference"),
+            @Mapping(target = "category", source = "article.category.name")})
     public abstract ArticleDTO fromArticleToDTO(Article article);
 
     @Mappings({
             @Mapping(target = "createdBy", expression = "java(userRepository.findOneByReference(dto.getCreatedByUserReference()).orElse(null))"),
+            @Mapping(target = "category", expression = "java(categoryRepository.findOneByName(dto.getCategory()).orElse(null))"),
             @Mapping(target = "id", expression = "java(articleRepository.findIdByReference(dto.getReference()).orElse(null))")
     })
     public abstract Article fromDTOToArticle(ArticleDTO dto);
@@ -107,12 +112,12 @@ public abstract class DTOMapper {
 
     @Mappings({
             @Mapping(target = "reference", ignore = true),
+            @Mapping(target = "category", expression = "java(categoryRepository.findOneByName(dto.getCategory()).orElse(null))")
     })
     public abstract void updateArticleFromDto(ArticleDTO dto, @MappingTarget Article article);
 
     @Mappings({
-            @Mapping(target = "reference", ignore = true),
-    })
+            @Mapping(target = "reference", ignore = true)})
     public abstract void updateAddressFromDto(AddressDTO dto, @MappingTarget Address address);
 
 

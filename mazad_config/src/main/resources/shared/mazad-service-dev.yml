@@ -17,7 +17,7 @@ spring:
   sleuth.sampler.percentage: 1.0
 
 flyway:
-  enabled: true
+  enabled: false
   baseline-on-migrate: true
   baseline-version: 0
   encoding: UTF-8

@@ -1,5 +1,7 @@
 package ch.com.mazad.web.dto;
 
+import ch.com.mazad.domain.GeoPoint;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -30,6 +32,8 @@ public class AddressDTO
     @NotNull
     @Size(min = 2, max = 255)
     private String postalCode;
+
+    private GeoPoint location;
 
     public String getReference()
     {
@@ -99,5 +103,13 @@ public class AddressDTO
     public void setPostalCode(String postalCode)
     {
         this.postalCode = postalCode;
+    }
+
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
 }

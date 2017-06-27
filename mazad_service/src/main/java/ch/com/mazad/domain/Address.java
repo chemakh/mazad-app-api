@@ -7,8 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(indexes = {@Index(name = "index_address_reference", columnList = "reference", unique = true)})
-public class Address
-{
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,87 +27,81 @@ public class Address
 
     private String postalCode;
 
-    public Address()
-    {
+    @Embedded
+    private GeoPoint location;
+
+    public Address() {
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getReference()
-    {
+    public String getReference() {
         return reference;
     }
 
-    public void setReference(String reference)
-    {
+    public void setReference(String reference) {
         this.reference = reference;
     }
 
-    public String getCountry()
-    {
+    public String getCountry() {
         return country;
     }
 
-    public void setCountry(String country)
-    {
+    public void setCountry(String country) {
         this.country = country;
     }
 
-    public String getStreetAddress1()
-    {
+    public String getStreetAddress1() {
         return streetAddress1;
     }
 
-    public void setStreetAddress1(String streetAddress1)
-    {
+    public void setStreetAddress1(String streetAddress1) {
         this.streetAddress1 = streetAddress1;
     }
 
-    public String getStreetAddress2()
-    {
+    public String getStreetAddress2() {
         return streetAddress2;
     }
 
-    public void setStreetAddress2(String streetAddress2)
-    {
+    public void setStreetAddress2(String streetAddress2) {
         this.streetAddress2 = streetAddress2;
     }
 
-    public String getCity()
-    {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(String city)
-    {
+    public void setCity(String city) {
         this.city = city;
     }
 
-    public String getRegion()
-    {
+    public String getRegion() {
         return region;
     }
 
-    public void setRegion(String region)
-    {
+    public void setRegion(String region) {
         this.region = region;
     }
 
-    public String getPostalCode()
-    {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode)
-    {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
 }

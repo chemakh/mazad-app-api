@@ -37,6 +37,8 @@ public class ArticleDTO implements Serializable
 
     private PhotoDTO avatar;
 
+    private String category;
+
     private Set<PhotoDTO> photos = new HashSet<>();
 
     public String getReference()
@@ -135,6 +137,14 @@ public class ArticleDTO implements Serializable
     public void setAvatar(PhotoDTO avatar)
     {
         this.avatar = avatar;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Set<PhotoDTO> getPhotos()

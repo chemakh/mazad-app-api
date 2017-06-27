@@ -31,6 +31,8 @@ public class Article implements Serializable
 
     private String description;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User createdBy;
 
     private LocalDateTime creationDate;
@@ -47,10 +49,18 @@ public class Article implements Serializable
     @JoinColumn(name = "avatar_id")
     private Photo avatar;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "article_id")
     @Fetch(FetchMode.SUBSELECT)
     private Set<Photo> photos = new HashSet<>();
+
+    private boolean deleted;
+
+    private LocalDateTime deletionDate;
 
     public Long getId()
     {
@@ -162,6 +172,14 @@ public class Article implements Serializable
         this.avatar = avatar;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public Set<Photo> getPhotos()
     {
         return photos;
@@ -170,6 +188,22 @@ public class Article implements Serializable
     public void setPhotos(Set<Photo> photos)
     {
         this.photos = photos;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public LocalDateTime getDeletionDate() {
+        return deletionDate;
+    }
+
+    public void setDeletionDate(LocalDateTime deletionDate) {
+        this.deletionDate = deletionDate;
     }
 
     @Override
