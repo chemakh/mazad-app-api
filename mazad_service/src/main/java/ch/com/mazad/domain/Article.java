@@ -43,6 +43,8 @@ public class Article implements Serializable
 
     private BigDecimal finalPrice;
 
+    private BigDecimal bidAmount;
+
     private boolean sold;
 
     @OneToOne(fetch = FetchType.EAGER)
@@ -150,6 +152,14 @@ public class Article implements Serializable
     public void setFinalPrice(BigDecimal finalPrice)
     {
         this.finalPrice = finalPrice;
+    }
+
+    public BigDecimal getBidAmount() {
+        return bidAmount;
+    }
+
+    public void setBidAmount(BigDecimal bidAmount) {
+        this.bidAmount = bidAmount;
     }
 
     public boolean isSold()

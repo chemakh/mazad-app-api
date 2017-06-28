@@ -1,9 +1,9 @@
-package ch.com.mazad.config.apidoc;
+package ch.com.mazad.config;
 
-import ch.com.mazad.config.MazadProperties;
 import ch.com.mazad.exception.ErrorConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +34,13 @@ import static springfox.documentation.builders.PathSelectors.regex;
 public class SwaggerConfiguration
 {
 
-    private final static Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
-
     public static final String DEFAULT_INCLUDE_PATTERN = "/.*";
-
+    private final static Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
     @Inject
     private MazadProperties mazadProperties;
+
+    @Value("${mazad.swagger.token}")
+    private String token;
 
 
     @Bean
@@ -74,7 +75,7 @@ public class SwaggerConfiguration
                 .description("Authentication token (see /ws/user/authenticate)")
                 .allowMultiple(false)
                 .required(false)
-                .defaultValue("Bearer")
+                .defaultValue("Bearer"+token)
                 .build());
 
         parameters.add(new ParameterBuilder()

@@ -58,11 +58,14 @@ public abstract class DTOMapper {
     public abstract User fromDTOToUser(UserDTO dto);
 
     @Mappings({
-            @Mapping(target = "articleReference", source = "article.createdBy.reference")})
+            @Mapping(target = "articleReference", source = "article.reference"),
+            @Mapping(target = "userReference", source = "user.reference")
+    })
     public abstract BidDTO fromBidToDTO(Bid bid);
 
     @Mappings({
             @Mapping(target = "article", expression = "java(articleRepository.findOneByReference(dto.getArticleReference()).orElse(null))"),
+            @Mapping(target = "user", expression = "java(userRepository.findOneByReference(dto.getUserReference()).orElse(null))"),
             @Mapping(target = "id", expression = "java(bidRepository.findIdByReference(dto.getReference()).orElse(null))")
     })
     public abstract Bid fromDTOToBid(BidDTO dto);

@@ -44,6 +44,7 @@ public class ArticleService {
     public ArticleDTO createArticle(ArticleDTO article) {
 
         article.setReference(TokenUtil.generateReference());
+        article.setCurrentPrice(article.getInitialPrice());
         return mapper.fromArticleToDTO(articleRepository.save(mapper.fromDTOToArticle(article)));
 
     }

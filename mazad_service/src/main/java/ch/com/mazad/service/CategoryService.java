@@ -4,6 +4,7 @@ import ch.com.mazad.domain.Category;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.ArticleRepository;
 import ch.com.mazad.repository.CategoryRepository;
+import ch.com.mazad.utils.TokenUtil;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class CategoryService {
 
     public Category createCategory(Category category) {
 
+        category.setReference(TokenUtil.generateReference());
         return categoryRepository.save(category);
     }
 

@@ -1,8 +1,11 @@
 package ch.com.mazad.web;
 
+import ch.com.mazad.domain.Bid;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.service.ArticleService;
+import ch.com.mazad.service.BidService;
 import ch.com.mazad.web.dto.ArticleDTO;
+import ch.com.mazad.web.dto.BidDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by Chemakh on 27/06/2017.
@@ -28,6 +32,9 @@ public class ArticleController {
 
     @Inject
     private ArticleService articleService;
+
+    @Inject
+    private BidService bidService;
 
     @RequestMapping(value = "/",
             method = RequestMethod.POST,
@@ -94,6 +101,59 @@ public class ArticleController {
     public JSONObject deleteArticle(@RequestParam("reference") String reference) throws MazadException {
 
         return articleService.deleteArticle(reference);
+    }
+
+    @RequestMapping(value = "/bids",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Create Bid Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = Bid.class),
+            @ApiResponse(code = 400, message = "Validation Error, Database conflict"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public BidDTO createBid(@Valid @RequestBody BidDTO bidDTO, @RequestParam("reference_article") String referenceArticle
+            , @RequestParam("reference_user") String referenceUser) throws MazadException {
+
+        return bidService.createBid(bidDTO, referenceArticle, referenceUser);
+    }
+
+    @RequestMapping(value = "/bids",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Bid Details Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = Bid.class),
+            @ApiResponse(code = 404, message = "Bid with Ref not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public List<BidDTO> getBid(@RequestParam(value = "reference", required = false) String reference,
+                               @RequestParam("reference_article") String referenceArticle
+            , @RequestParam("reference_user") String referenceUser) throws MazadException {
+
+        return bidService.getBid(reference, referenceArticle, referenceUser);
+    }
+
+    @RequestMapping(value = "/bids",
+            method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete Bid Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = Bid.class),
+            @ApiResponse(code = 404, message = "Bid with Ref not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public JSONObject cancelBid(@RequestParam("reference") String reference,
+                                @RequestParam("reference_article") String referenceArticle
+            , @RequestParam(value = "reference_user", required = false) String referenceUser) throws MazadException {
+
+        return bidService.cancelBid(reference, referenceArticle, referenceUser);
     }
 
 

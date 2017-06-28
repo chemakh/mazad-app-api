@@ -3,6 +3,7 @@ package ch.com.mazad.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,9 +23,15 @@ public class Bid implements Serializable
     @Column(unique = true)
     private String reference;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private LocalDateTime creationDate;
 
     private BigDecimal initialPrice;
 
@@ -60,6 +67,22 @@ public class Bid implements Serializable
     public void setArticle(Article article)
     {
         this.article = article;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public BigDecimal getInitialPrice()

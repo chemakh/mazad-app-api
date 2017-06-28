@@ -33,6 +33,8 @@ public class ArticleDTO implements Serializable
 
     private BigDecimal finalPrice;
 
+    private BigDecimal bidAmount;
+
     private boolean sold;
 
     private PhotoDTO avatar;
@@ -117,6 +119,14 @@ public class ArticleDTO implements Serializable
     public void setFinalPrice(BigDecimal finalPrice)
     {
         this.finalPrice = finalPrice;
+    }
+
+    public BigDecimal getBidAmount() {
+        return bidAmount;
+    }
+
+    public void setBidAmount(BigDecimal bidAmount) {
+        this.bidAmount = bidAmount;
     }
 
     public boolean isSold()
