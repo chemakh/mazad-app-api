@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/ws/article")
 public class ArticleController {
 
-    private final static Logger logger = LoggerFactory.getLogger(ArticleController.class);  
+    private final static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     @Inject
     private ArticleService articleService;
@@ -82,9 +82,11 @@ public class ArticleController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden")
     })
-    public ArticleDTO getArticle(@RequestParam(value = "reference", required = false) String reference) throws MazadException {
-
-        return articleService.getArticleByReference(reference);
+    public List<ArticleDTO> getArticles(@RequestParam(value = "reference", required = false) String reference,
+                                        @RequestParam(value = "category_ref", required = false) String categoryRef,
+                                        @RequestParam(value = "user_ref", required = false) String userRef,
+                                        @RequestParam(value = "user_ref", required = false) boolean byBid) throws MazadException {
+        return articleService.getArticles(reference, categoryRef, userRef, byBid);
     }
 
     @RequestMapping(value = "/",
@@ -155,7 +157,6 @@ public class ArticleController {
 
         return bidService.cancelBid(reference, referenceArticle, referenceUser);
     }
-
 
 
 }

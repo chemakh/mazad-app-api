@@ -12,6 +12,7 @@ import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,10 @@ public class BidService {
 
         ArticleDTO articleDTO = articleService.getArticleByReference(articleRef);
         if (!articleDTO.isSold()) {
+
+            if (articleDTO.getBidAmount() != null && articleDTO.getBidAmount().compareTo(BigDecimal.ZERO) > 0 && articleDTO.getBidAmount().compareTo(bidDTO.getBidAmount()) != 0)
+                throw MazadException.unprocessableEntityExceptionBuilder("article.bid_amount", null);
+
             bidDTO.setInitialPrice(articleDTO.getCurrentPrice());
             articleDTO.setCurrentPrice(articleDTO.getCurrentPrice().add(bidDTO.getBidAmount()));
             bidDTO.setFinalPrice(articleDTO.getCurrentPrice());
@@ -46,7 +51,6 @@ public class BidService {
             bidDTO.setCreationDate(LocalDateTime.now());
             articleService.updateArticle(articleDTO);
             return mapper.fromBidToDTO(bidRepository.save(mapper.fromDTOToBid(bidDTO)));
-
         }
 
         throw MazadException.unprocessableEntityExceptionBuilder("article.sold", null);
@@ -54,14 +58,22 @@ public class BidService {
     }
 
 
-    public List<BidDTO> getBid(String reference, String referenceArticle, String userRef) throws MazadException {
+    public List<BidDTO> getBid(String reference, String articleRef, String userRef) throws MazadException {
 
         if (reference != null)
-            return Collections.singletonList(bidRepository.findOneByReferenceAndArticleReference(reference, referenceArticle).map(mapper::fromBidToDTO)
+            return Collections.singletonList(bidRepository.findOneByReferenceAndArticleReference(reference, articleRef).map(mapper::fromBidToDTO)
                     .orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Bid.class, reference)));
-        else
-            return bidRepository.findByArticleReference(referenceArticle).stream().map(mapper::fromBidToDTO)
+        else if (articleRef != null && userRef != null)
+            return bidRepository.findByArticleReferenceAndUserReference(articleRef, userRef).stream().map(mapper::fromBidToDTO)
                     .collect(Collectors.toList());
+        else if (articleRef != null)
+            return bidRepository.findByArticleReference(articleRef).stream().map(mapper::fromBidToDTO)
+                    .collect(Collectors.toList());
+        else if (userRef != null)
+            return bidRepository.findByUserReference(userRef).stream().map(mapper::fromBidToDTO)
+                    .collect(Collectors.toList());
+        else
+            return Collections.EMPTY_LIST;
     }
 
     public JSONObject cancelBid(String reference, String referenceArticle, String refUser) throws MazadException {

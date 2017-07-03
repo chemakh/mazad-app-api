@@ -18,7 +18,14 @@ public interface BidRepository extends JpaRepository<Bid,Long> {
 
     Optional<Bid> findOneByReferenceAndArticleReferenceAndUserReference(String ref, String refArticle, String refUser);
 
+    List<Bid> findByArticleReferenceAndUserReference(String refArticle, String refUser);
+
     List<Bid> findByArticleReference(String refArticle);
+
+    List<Bid> findByArticleCategoryReferenceAndUserReference(String catRef, String userRef);
+
+    List<Bid> findByUserReference(String userRef);
+
 
     @Query(value = "select b.id from bid b where b.reference=?1",nativeQuery = true)
     Optional<Long> findIdByReference(String ref);

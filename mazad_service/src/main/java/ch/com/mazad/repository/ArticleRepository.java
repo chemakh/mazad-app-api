@@ -10,15 +10,18 @@ import java.util.Optional;
 /**
  * Created by Chemakh on 22/06/2017.
  */
-public interface ArticleRepository extends JpaRepository<Article,Long> {
+public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findOneByReference(String ref);
 
-    List<Article> findByCategoryNameAndDeletedIsFalse(String name);
+    List<Article> findByDeletedIsFalseAndSoldIsFalse();
 
-    List<Article> findByCategoryReference(String reference);
+    List<Article> findByCategoryReference(String catRef);
 
+    List<Article> findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalse(String catRef, String userRef);
 
-    @Query(value = "select art.id from article art where art.reference=?1",nativeQuery = true)
+    List<Article> findByCreatedByReferenceAndDeletedIsFalse(String userRef);
+
+    @Query(value = "select art.id from article art where art.reference=?1", nativeQuery = true)
     Optional<Long> findIdByReference(String ref);
 }
