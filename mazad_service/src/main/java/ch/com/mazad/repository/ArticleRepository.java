@@ -4,6 +4,7 @@ import ch.com.mazad.domain.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findByCreatedByReferenceAndDeletedIsFalse(String userRef);
 
     @Query(value = "select art.id from article art where art.reference=?1", nativeQuery = true)
-    Optional<Long> findIdByReference(String ref);
+    Optional<BigInteger> findIdByReference(String ref);
 }

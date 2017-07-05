@@ -32,7 +32,7 @@ public class Article implements Serializable
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User createdBy;
 
     private LocalDateTime creationDate;
@@ -55,8 +55,7 @@ public class Article implements Serializable
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "article_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article", cascade = CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
     private Set<Photo> photos = new HashSet<>();
 

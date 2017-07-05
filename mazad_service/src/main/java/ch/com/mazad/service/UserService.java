@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -36,6 +38,9 @@ public class UserService {
 
     @Inject
     private PasswordEncoder passwordEncoder;
+
+    @Inject
+    private PhotoService photoService;
 
     @Inject
     private DTOMapper mapper;
@@ -61,6 +66,10 @@ public class UserService {
         Optional.ofNullable(userDTO.getPassword()).ifPresent(pass -> user.setPassword(passwordEncoder.encode(pass)));
 
         return mapper.fromUserToDTO(userRepository.save(user));
+    }
+
+    public UserDTO updateUserAvatar(String userRef, MultipartFile photo) throws IOException, MazadException {
+        return photoService.createUserAvatar(photo, userRef);
     }
 
     public List<UserDTO> getUser(String reference) throws MazadException {
@@ -216,6 +225,4 @@ public class UserService {
         }
 
     }
-
-
 }

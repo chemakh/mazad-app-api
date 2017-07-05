@@ -2,18 +2,22 @@ package ch.com.mazad.service;
 
 import ch.com.mazad.domain.Article;
 import ch.com.mazad.domain.Bid;
+import ch.com.mazad.domain.Photo;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.ArticleRepository;
 import ch.com.mazad.repository.BidRepository;
 import ch.com.mazad.utils.DTOMapper;
 import ch.com.mazad.utils.TokenUtil;
 import ch.com.mazad.web.dto.ArticleDTO;
+import ch.com.mazad.web.dto.PhotoDTO;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +37,9 @@ public class ArticleService {
 
     @Inject
     private BidRepository bidRepository;
+
+    @Inject
+    private PhotoService photoService;
 
     @Inject
     private DTOMapper mapper;
@@ -70,10 +77,18 @@ public class ArticleService {
 
     }
 
-    public ArticleDTO createArticle(ArticleDTO article) {
+    public ArticleDTO updateArticleAvatar(String articleRef, MultipartFile avatar) throws MazadException, IOException {
+        return photoService.createArticleAvatar(avatar, articleRef);
+
+    }
+
+    public ArticleDTO createArticle(ArticleDTO article, MultipartFile avatar) throws MazadException, IOException {
 
         article.setReference(TokenUtil.generateReference());
         article.setCurrentPrice(article.getInitialPrice());
+        article.setCreationDate(LocalDateTime.now());
+        if (avatar != null)
+            article.setAvatar(mapper.fromPhotoToDTO(photoService.createPhoto(avatar, null)));
         return mapper.fromArticleToDTO(articleRepository.save(mapper.fromDTOToArticle(article)));
 
     }
@@ -101,9 +116,23 @@ public class ArticleService {
         JSONObject result = new JSONObject();
         result.put("result", "delete-success");
         return result;
-
-
     }
 
+    public ArticleDTO addPhoto(String articleRef, MultipartFile avatar) throws MazadException, IOException {
 
+        Photo photo = photoService.createPhoto(avatar, mapper.fromDTOToArticle(getArticleByReference(articleRef)));
+        ArticleDTO articleDTO = getArticleByReference(articleRef);
+        articleDTO.getPhotos().add(mapper.fromPhotoToDTO(photo));
+        return articleDTO;
+    }
+
+    public List<PhotoDTO> getPhotos(String articleRef) throws MazadException {
+        return getArticleByReference(articleRef).getPhotos().stream().collect(Collectors.toList());
+    }
+
+    public ArticleDTO removePhoto(String articleRef, String reference) throws MazadException, IOException {
+
+        photoService.removePhoto(photoService.getPhotoByArticle(reference, articleRef));
+        return getArticleByReference(articleRef);
+    }
 }

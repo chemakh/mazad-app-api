@@ -4,6 +4,7 @@ package ch.com.mazad.web;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.restclients.RestCLientCallback;
 import ch.com.mazad.service.UserService;
+import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,9 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Api(value = "user", description = "Operations with user", produces = "application/json")
 @RestController
@@ -126,6 +129,23 @@ public class UserController {
     public JSONObject deleteUser(@RequestParam("reference") String reference) throws MazadException {
 
         return userService.deleteUser(reference);
+    }
+
+    @PutMapping(value = "/avatar",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update User Avatar Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = ArticleDTO.class),
+            @ApiResponse(code = 400, message = "Validation Error, Database conflict"),
+            @ApiResponse(code = 404, message = "Object with Ref not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+
+    })
+    public UserDTO updateArticleAvatar(@RequestParam("user_ref") String userRef, @RequestPart(value = "photo") MultipartFile photo) throws MazadException, IOException {
+
+        return userService.updateUserAvatar(userRef, photo);
     }
 
 

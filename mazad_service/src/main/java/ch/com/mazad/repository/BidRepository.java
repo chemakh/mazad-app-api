@@ -4,6 +4,7 @@ import ch.com.mazad.domain.Bid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,5 +29,5 @@ public interface BidRepository extends JpaRepository<Bid,Long> {
 
 
     @Query(value = "select b.id from bid b where b.reference=?1",nativeQuery = true)
-    Optional<Long> findIdByReference(String ref);
+    Optional<BigInteger> findIdByReference(String ref);
 }

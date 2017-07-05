@@ -19,6 +19,8 @@ public class MazadProperties {
 
     private final CorsConfiguration cors = new CorsConfiguration();
 
+    private final Avatar avatar = new Avatar();
+
     public Http getHttp() {
         return http;
     }
@@ -33,6 +35,10 @@ public class MazadProperties {
 
     public CorsConfiguration getCors() {
         return cors;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
     }
 
     public static class Security {
@@ -173,11 +179,33 @@ public class MazadProperties {
         }
     }
 
+    public static class Avatar {
+
+        private String path;
+
+        private String url;
+
+        public String getPath() {
+            return path;
+        }
+
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+    }
+
     public static class Cache {
 
-        private int timeToLiveSeconds = 3600;
-
         private final Ehcache ehcache = new Ehcache();
+        private int timeToLiveSeconds = 3600;
 
         public int getTimeToLiveSeconds() {
             return timeToLiveSeconds;
