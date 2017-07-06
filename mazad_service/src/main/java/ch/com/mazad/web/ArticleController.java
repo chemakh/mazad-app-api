@@ -7,7 +7,6 @@ import ch.com.mazad.service.BidService;
 import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.BidDTO;
 import ch.com.mazad.web.dto.PhotoDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -29,7 +28,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/ws/article")
+@RequestMapping("/ws/articles")
 public class ArticleController {
 
     private final static Logger logger = LoggerFactory.getLogger(ArticleController.class);
@@ -40,7 +39,7 @@ public class ArticleController {
     @Inject
     private BidService bidService;
 
-    @PostMapping(value = "/",
+    @PostMapping(value = "",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Create Article Service")
@@ -50,14 +49,14 @@ public class ArticleController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden")
     })
-    public ArticleDTO createArticle(@Valid @RequestPart("article") String article, @RequestPart(value = "photo", required = false) MultipartFile photo) throws MazadException, IOException {
+    public ArticleDTO createArticle(@RequestPart("article") ArticleDTO article, @RequestPart(value = "photo", required = false) MultipartFile photo) throws MazadException, IOException {
 
-        ObjectMapper mapper = new ObjectMapper();
-        ArticleDTO articleDTO = mapper.readValue(article, ArticleDTO.class);
-        return articleService.createArticle(articleDTO, photo);
+//        ObjectMapper mapper = new ObjectMapper();
+//        ArticleDTO articleDTO = mapper.readValue(article, ArticleDTO.class);
+        return articleService.createArticle(article, null);
     }
 
-    @PutMapping(value = "/",
+    @PutMapping(value = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update Article Service")
@@ -75,7 +74,7 @@ public class ArticleController {
         return articleService.updateArticle(articleDTO);
     }
 
-    @PutMapping(value = "/avatar",
+    @PutMapping(value = "avatar",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update Article Avatar Service")
@@ -92,7 +91,7 @@ public class ArticleController {
         return articleService.updateArticleAvatar(articleRef, photo);
     }
 
-    @GetMapping(value = "/",
+    @GetMapping(value = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Article Details Service")
@@ -109,7 +108,7 @@ public class ArticleController {
         return articleService.getArticles(reference, categoryRef, userRef, byBid);
     }
 
-    @DeleteMapping(value = "/",
+    @DeleteMapping(value = "",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete Article Service")
@@ -124,7 +123,7 @@ public class ArticleController {
         return articleService.deleteArticle(reference);
     }
 
-    @PostMapping(value = "/bids",
+    @PostMapping(value = "bids",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Create Bid Service")
@@ -140,7 +139,7 @@ public class ArticleController {
         return bidService.createBid(bidDTO, referenceArticle, referenceUser);
     }
 
-    @GetMapping(value = "/bids",
+    @GetMapping(value = "bids",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Bid Details Service")
@@ -157,7 +156,7 @@ public class ArticleController {
         return bidService.getBid(reference, referenceArticle, referenceUser);
     }
 
-    @DeleteMapping(value = "/bids",
+    @DeleteMapping(value = "bids",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete Bid Service")
@@ -175,7 +174,7 @@ public class ArticleController {
     }
 
 
-    @PostMapping(value = "/photos",
+    @PostMapping(value = "photos",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Photo Service")
@@ -190,7 +189,7 @@ public class ArticleController {
         return articleService.addPhoto(articleRef, photo);
     }
 
-    @DeleteMapping(value = "/photos",
+    @DeleteMapping(value = "photos",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Remove Photo Service")
@@ -207,7 +206,7 @@ public class ArticleController {
         return articleService.removePhoto(articleRef, reference);
     }
 
-    @GetMapping(value = "/photos",
+    @GetMapping(value = "photos",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Article Photos Service")

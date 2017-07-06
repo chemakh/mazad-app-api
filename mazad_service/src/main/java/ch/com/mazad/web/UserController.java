@@ -27,7 +27,7 @@ import java.io.IOException;
 
 @Api(value = "user", description = "Operations with user", produces = "application/json")
 @RestController
-@RequestMapping("/ws/user")
+@RequestMapping("/ws/users")
 public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -50,7 +50,7 @@ public class UserController {
     @Inject
     private RestCLientCallback restCLientCallback;
 
-    @RequestMapping(value = "/authenticate",
+    @RequestMapping(value = "authenticate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -65,7 +65,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/token/refresh",
+    @RequestMapping(value = "token/refresh",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -79,7 +79,7 @@ public class UserController {
         return responseEntity.getBody();
     }
 
-    @RequestMapping(value = "/",
+    @RequestMapping(value = "",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -96,7 +96,7 @@ public class UserController {
         return userService.createUser(userDTO);
     }
 
-    @RequestMapping(value = "/",
+    @RequestMapping(value = "",
             method = RequestMethod.PUT,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -115,7 +115,7 @@ public class UserController {
         return userService.updateUser(userDTO, reference);
     }
 
-    @RequestMapping(value = "/",
+    @RequestMapping(value = "",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -131,7 +131,7 @@ public class UserController {
         return userService.deleteUser(reference);
     }
 
-    @PutMapping(value = "/avatar",
+    @PutMapping(value = "avatar",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update User Avatar Service")
@@ -150,7 +150,7 @@ public class UserController {
 
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/activate",
+    @RequestMapping(value = "activate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -164,7 +164,7 @@ public class UserController {
         return userService.activateRegistration(key);
     }
 
-    @RequestMapping(value = "/password/reset",
+    @RequestMapping(value = "password/reset",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -183,7 +183,7 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/password/reset/finish",
+    @RequestMapping(value = "password/reset/finish",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -200,7 +200,7 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/password/change",
+    @RequestMapping(value = "password/change",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -218,7 +218,7 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/email/verify",
+    @RequestMapping(value = "email/verify",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -235,7 +235,7 @@ public class UserController {
 
     }
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/email/send",
+    @RequestMapping(value = "email/send",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)

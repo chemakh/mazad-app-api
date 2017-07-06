@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/ws/category")
+@RequestMapping("/ws/categories")
 public class CategoryController {
 
     @Inject
