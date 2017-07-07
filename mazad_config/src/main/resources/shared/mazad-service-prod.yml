@@ -21,7 +21,7 @@ flyway:
   baseline-version: 0
   encoding: UTF-8
   validate-on-migrate: false
-  locations: classpath:db/prod/dev
+  locations: classpath:db/prod/migration
 
 security:
   oauth2:
