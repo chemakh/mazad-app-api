@@ -14,9 +14,8 @@ spring:
         name: Mazad_AuthServer__prod
     datasource:
         url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
-        name:
-        username: root
-        password: root
+        username: mazaduser
+        password: 2fYY6xAt
         type: com.zaxxer.hikari.HikariDataSource
         hikari:
             connection-timeout: 60000
