@@ -54,10 +54,16 @@ public abstract class DTOMapper {
     })
     public abstract Article fromDTOToArticle(ArticleDTO dto) throws MazadException;
 
+    @Mappings({
+            @Mapping(target = "address", expression = "java(fromAddressToDTO(user.getAddress()))")
+
+    })
     public abstract UserDTO fromUserToDTO(User user);
 
     @Mappings({
-            @Mapping(target = "id", expression = "java(userRepository.findIdByReference(dto.getReference()).orElse(ZERO).longValue())")
+            @Mapping(target = "id", expression = "java(userRepository.findIdByReference(dto.getReference()).orElse(ZERO).longValue())"),
+                @Mapping(target = "address", expression = "java(fromDTOToAddress(dto.getAddress()))")
+
     })
     public abstract User fromDTOToUser(UserDTO dto);
 

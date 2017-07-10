@@ -24,11 +24,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
 
-                .antMatchers("/ws/user/authenticate")
-                .antMatchers("/ws/user/get")
-                .antMatchers("/ws/user/password/reset")
-                .antMatchers("/ws/user/password/reset/finish")
-                .antMatchers("/ws/user/token/refresh")
+                .antMatchers("/ws/users/authenticate")
+                .antMatchers("/ws/users/get")
+                .antMatchers(HttpMethod.POST,"/ws/users")
+                .antMatchers("/ws/users/password/reset")
+                .antMatchers("/ws/users/password/reset/finish")
+                .antMatchers("/ws/users/token/refresh");
 
 
 //                .antMatchers("/v2/api-docs",
@@ -38,26 +39,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                        "/swagger-ui.html",
 //                        "/webjars/**")
 
-                .antMatchers("/angular/**")
+//                .antMatchers("/angular/**")
 
                         //actuator endPoints
-                .antMatchers("/actuator")
-                .antMatchers("/auditevents")
-                .antMatchers("/autoconfig")
-                .antMatchers("/beans")
-                .antMatchers("/configprops")
-                .antMatchers("/trace")
-                .antMatchers("/dump")
-                .antMatchers("/env")
-                .antMatchers("/flyway")
-                .antMatchers("/health")
-                .antMatchers("/info")
-                .antMatchers("/loggers")
-                .antMatchers("/liquibase")
-                .antMatchers("/metrics")
-                .antMatchers("/mappings")
-                .antMatchers("/shutdown")
-                .antMatchers("/trace");
+//                .antMatchers("/actuator")
+//                .antMatchers("/auditevents")
+//                .antMatchers("/autoconfig")
+//                .antMatchers("/beans")
+//                .antMatchers("/configprops")
+//                .antMatchers("/trace")
+//                .antMatchers("/dump")
+//                .antMatchers("/env")
+//                .antMatchers("/flyway")
+//                .antMatchers("/health")
+//                .antMatchers("/info")
+//                .antMatchers("/loggers")
+//                .antMatchers("/liquibase")
+//                .antMatchers("/metrics")
+//                .antMatchers("/mappings")
+//                .antMatchers("/shutdown")
+//                .antMatchers("/trace");
 
 
     }

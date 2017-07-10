@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select us.reference from user us where us.email=?1",nativeQuery = true)
     Optional<String> getUserReferenceByEmail(String email);
 
-    @Query(value = "select us.id from user us where b.reference=?1", nativeQuery = true)
+    @Query(value = "select us.id from user us where us.reference=?1", nativeQuery = true)
     Optional<BigInteger> findIdByReference(String ref);
 
 }

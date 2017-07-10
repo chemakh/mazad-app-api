@@ -39,6 +39,8 @@ public class UserDTO implements Serializable
 
     private PhotoDTO avatar;
 
+    private AddressDTO address;
+
     public String getFirstname()
     {
         return firstname;
@@ -118,5 +120,15 @@ public class UserDTO implements Serializable
     public void setAvatar(PhotoDTO avatar)
     {
         this.avatar = avatar;
+    }
+
+    public AddressDTO getAddress()
+    {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address)
+    {
+        this.address = address;
     }
 }
