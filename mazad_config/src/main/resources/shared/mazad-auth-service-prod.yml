@@ -12,6 +12,10 @@ logging:
 spring:
     application:
         name: Mazad_AuthServer__prod
+    http:
+        multipart:
+            max-file-size: 4MB # Max file size. Values can use the suffixed "MB" or "KB" to indicate a Megabyte or Kilobyte size.
+            max-request-size: 50MB
     datasource:
         url: jdbc:mysql://localhost:3306/mazad?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: mazaduser

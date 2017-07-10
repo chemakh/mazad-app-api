@@ -7,6 +7,7 @@ import ch.com.mazad.service.BidService;
 import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.BidDTO;
 import ch.com.mazad.web.dto.PhotoDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -37,6 +38,9 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Inject
+    private ObjectMapper objectMapper;
+
+    @Inject
     private BidService bidService;
 
     @PostMapping(value = "",
@@ -49,11 +53,9 @@ public class ArticleController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden")
     })
-    public ArticleDTO createArticle(@RequestPart("article") ArticleDTO article, @RequestPart(value = "photo", required = false) MultipartFile photo) throws MazadException, IOException {
+    public ArticleDTO createArticle(@RequestPart("article") String article, @RequestPart(value = "photo", required = false) List<MultipartFile> photos) throws MazadException, IOException {
 
-//        ObjectMapper mapper = new ObjectMapper();
-//        ArticleDTO articleDTO = mapper.readValue(article, ArticleDTO.class);
-        return articleService.createArticle(article, null);
+        return articleService.createArticle(objectMapper.readValue(article, ArticleDTO.class), photos);
     }
 
     @PutMapping(value = "",

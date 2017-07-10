@@ -82,14 +82,30 @@ public class ArticleService {
 
     }
 
-    public ArticleDTO createArticle(ArticleDTO article, MultipartFile avatar) throws MazadException, IOException {
+    public ArticleDTO createArticle(ArticleDTO article, List<MultipartFile> avatars) throws MazadException, IOException {
 
         article.setReference(TokenUtil.generateReference());
         article.setCurrentPrice(article.getInitialPrice());
         article.setCreationDate(LocalDateTime.now());
-        if (avatar != null)
-            article.setAvatar(mapper.fromPhotoToDTO(photoService.createPhoto(avatar, null)));
-        return mapper.fromArticleToDTO(articleRepository.save(mapper.fromDTOToArticle(article)));
+
+        Article ar = articleRepository.save(mapper.fromDTOToArticle(article));
+        if (avatars != null && !avatars.isEmpty()) {
+
+            String reference = ar.getReference();
+            avatars.forEach(av -> {
+                try {
+                    photoService.createArticleAvatar(av, reference);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            ar = articleRepository.findOneByReference(reference).get();
+            ar.setAvatar(ar.getPhotos().stream().findFirst().orElse(null));
+            ar = articleRepository.save(ar);
+
+        }
+        return mapper.fromArticleToDTO(ar);
 
     }
 
