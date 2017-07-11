@@ -3,6 +3,7 @@ package ch.com.mazad.utils;
 import ch.com.mazad.domain.*;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.*;
+import ch.com.mazad.service.PhotoService;
 import ch.com.mazad.web.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,6 +23,9 @@ public abstract class DTOMapper {
 
     @Inject
     ArticleRepository articleRepository;
+
+    @Inject
+    PhotoService photoService;
 
     @Inject
     CategoryRepository categoryRepository;
@@ -44,26 +48,26 @@ public abstract class DTOMapper {
 
     @Mappings({
             @Mapping(target = "createdByUserReference", source = "article.createdBy.reference"),
-            @Mapping(target = "category", source = "article.category.name")})
+            @Mapping(target = "category", source = "article.category.name"),
+           @Mapping(target = "photos", expression = "java(photoService.getArticlePhotos(article.getReference()))")
+    })
     public abstract ArticleDTO fromArticleToDTO(Article article);
 
     @Mappings({
             @Mapping(target = "createdBy", expression = "java(userRepository.findOneByReference(dto.getCreatedByUserReference()).orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, dto.getCreatedByUserReference())))"),
             @Mapping(target = "category", expression = "java(categoryRepository.findOneByName(dto.getCategory()).orElse(null))"),
-            @Mapping(target = "id", expression = "java(articleRepository.findIdByReference(dto.getReference()).orElse(ZERO).longValue())")
+            @Mapping(target = "id", expression = "java(articleRepository.findIdByReference(dto.getReference()).orElse(ZERO).longValue())"),
     })
     public abstract Article fromDTOToArticle(ArticleDTO dto) throws MazadException;
 
     @Mappings({
             @Mapping(target = "address", expression = "java(fromAddressToDTO(user.getAddress()))")
-
     })
     public abstract UserDTO fromUserToDTO(User user);
 
     @Mappings({
             @Mapping(target = "id", expression = "java(userRepository.findIdByReference(dto.getReference()).orElse(ZERO).longValue())"),
                 @Mapping(target = "address", expression = "java(fromDTOToAddress(dto.getAddress()))")
-
     })
     public abstract User fromDTOToUser(UserDTO dto);
 
@@ -132,7 +136,6 @@ public abstract class DTOMapper {
             @Mapping(target = "reference", ignore = true),
             @Mapping(target = "avatar", ignore = true),
             @Mapping(target = "creationDate", ignore = true),
-            @Mapping(target = "photos", ignore = true),
             @Mapping(target = "category", expression = "java(categoryRepository.findOneByName(dto.getCategory()).orElse(null))")
     })
     public abstract void updateArticleFromDto(ArticleDTO dto, @MappingTarget Article article);

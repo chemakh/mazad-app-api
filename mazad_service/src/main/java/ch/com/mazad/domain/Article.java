@@ -1,16 +1,11 @@
 package ch.com.mazad.domain;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Created by Chemakh on 18/06/2017.
@@ -54,10 +49,6 @@ public class Article implements Serializable
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article", cascade = CascadeType.ALL)
-    @Fetch(FetchMode.SUBSELECT)
-    private Set<Photo> photos = new HashSet<>();
 
     private boolean deleted;
 
@@ -187,16 +178,6 @@ public class Article implements Serializable
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Set<Photo> getPhotos()
-    {
-        return photos;
-    }
-
-    public void setPhotos(Set<Photo> photos)
-    {
-        this.photos = photos;
     }
 
     public boolean isDeleted() {

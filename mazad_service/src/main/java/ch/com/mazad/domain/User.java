@@ -36,6 +36,8 @@ public class User implements Serializable
     @Column(name = "email", unique = true)
     private String email;
 
+    private String mobileNumber;
+
     @Column(name = "password", length = 60, nullable = true)
     private String password;
 
@@ -127,6 +129,14 @@ public class User implements Serializable
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public String getPassword()

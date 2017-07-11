@@ -6,6 +6,7 @@ import ch.com.mazad.restclients.RestCLientCallback;
 import ch.com.mazad.service.UserService;
 import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.UserDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -31,6 +32,9 @@ import java.io.IOException;
 public class UserController {
 
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Inject
+    private ObjectMapper objectMapper;
 
     @Value("${mazad.security.authentication.oauth.clientid}")
     private String oauthClientId;
@@ -90,10 +94,8 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden")
     })
-    public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) throws MazadException
-    {
-
-        return userService.createUser(userDTO);
+    public UserDTO createUser(@Valid @RequestPart("user") String user, @RequestPart(value = "avatar", required = false) MultipartFile avatar) throws MazadException, IOException {
+        return userService.createUser(objectMapper.readValue(user,UserDTO.class),avatar);
     }
 
     @RequestMapping(value = "",

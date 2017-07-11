@@ -47,8 +47,7 @@ public class UserService
     private DTOMapper mapper;
 
 
-    public UserDTO createUser(UserDTO userDTO) throws MazadException
-    {
+    public UserDTO createUser(UserDTO userDTO, MultipartFile avatar) throws MazadException, IOException {
 
         checkIfEmailIsUsed(userDTO.getEmail(), userDTO.getReference());
 
@@ -60,6 +59,10 @@ public class UserService
         String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
         userDTO.setPassword(encryptedPassword);
         userDTO.setReference(TokenUtil.generateReference());
+
+        if (avatar != null)
+            userDTO.setAvatar(mapper.fromPhotoToDTO(photoService.createPhoto(avatar, null)));
+
         User user = userRepository.save(mapper.fromDTOToUser(userDTO));
         return mapper.fromUserToDTO(user);
     }

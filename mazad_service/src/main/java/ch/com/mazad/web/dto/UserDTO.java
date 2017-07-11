@@ -29,6 +29,8 @@ public class UserDTO implements Serializable
     @Email
     private String email;
 
+    private String mobileNumber;
+
     @NotNull
     @Size(min = 2,max = 255)
     private String password;
@@ -59,6 +61,14 @@ public class UserDTO implements Serializable
     public void setLastname(String lastname)
     {
         this.lastname = lastname;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public String getReference()

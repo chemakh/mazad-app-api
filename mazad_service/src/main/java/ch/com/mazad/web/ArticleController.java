@@ -53,7 +53,7 @@ public class ArticleController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden")
     })
-    public ArticleDTO createArticle(@RequestPart("article") String article, @RequestPart(value = "photo", required = false) List<MultipartFile> photos) throws MazadException, IOException {
+    public ArticleDTO createArticle(@RequestPart("article") String article, @RequestPart(value = "photos", required = false) List<MultipartFile> photos) throws MazadException, IOException {
 
         return articleService.createArticle(objectMapper.readValue(article, ArticleDTO.class), photos);
     }

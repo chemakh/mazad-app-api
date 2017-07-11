@@ -94,18 +94,13 @@ public class ArticleService {
             String reference = ar.getReference();
             avatars.forEach(av -> {
                 try {
-                    photoService.createArticleAvatar(av, reference);
+                    photoService.createPhoto(av, reference);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-
-            ar = articleRepository.findOneByReference(reference).get();
-            ar.setAvatar(ar.getPhotos().stream().findFirst().orElse(null));
-            ar = articleRepository.save(ar);
-
         }
-        return mapper.fromArticleToDTO(ar);
+        return mapper.fromArticleToDTO(articleRepository.findOneByReference(ar.getReference()).orElse(new Article()));
 
     }
 
@@ -136,7 +131,7 @@ public class ArticleService {
 
     public ArticleDTO addPhoto(String articleRef, MultipartFile avatar) throws MazadException, IOException {
 
-        Photo photo = photoService.createPhoto(avatar, mapper.fromDTOToArticle(getArticleByReference(articleRef)));
+        Photo photo = photoService.createPhoto(avatar, articleRef);
         ArticleDTO articleDTO = getArticleByReference(articleRef);
         articleDTO.getPhotos().add(mapper.fromPhotoToDTO(photo));
         return articleDTO;

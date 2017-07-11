@@ -12,6 +12,7 @@ import ch.com.mazad.repository.UserRepository;
 import ch.com.mazad.utils.DTOMapper;
 import ch.com.mazad.utils.TokenUtil;
 import ch.com.mazad.web.dto.ArticleDTO;
+import ch.com.mazad.web.dto.PhotoDTO;
 import ch.com.mazad.web.dto.UserDTO;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Chemakh on 05/07/2017.
@@ -77,9 +80,13 @@ public class PhotoService {
             throw MazadException.validationErrorBuilder(new FieldErrorDTO("Photo", "Photo", "must_be_not_null"));
     }
 
-    public Photo createPhoto(MultipartFile avatar, Article article) throws MazadException, IOException {
+    public Photo createPhoto(MultipartFile avatar, String articleRef) throws MazadException, IOException {
 
         if (avatar != null) {
+
+            Article article = articleRepository.findOneByReference(articleRef).
+                    orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleRef));
+
             Photo photo = new Photo();
             photo.setReference(TokenUtil.generateReference());
             photo.setLabel(avatar.getName());
@@ -87,7 +94,14 @@ public class PhotoService {
             photo.setArticle(article);
             avatar.transferTo(new File(mazadProperties.getAvatar().getPath() + photo.getName()));
 
-            return photoRepository.save(photo);
+            photo = photoRepository.save(photo);
+
+            if (article.getAvatar() == null) {
+                article.setAvatar(photo);
+                articleRepository.save(article);
+            }
+
+            return photo;
 
         } else
             throw MazadException.validationErrorBuilder(new FieldErrorDTO("Photo", "Photo", "must_be_not_null"));
@@ -96,6 +110,11 @@ public class PhotoService {
     public Photo getPhotoByArticle(String reference, String articleRef) throws MazadException {
         return photoRepository.findOneByReferenceAndArticleReference(reference, articleRef).orElseThrow(() ->
                 MazadException.resourceNotFoundExceptionBuilder(Photo.class, reference));
+    }
+
+    public List<PhotoDTO> getArticlePhotos(String articleRef)  {
+        return photoRepository.findByArticleReference(articleRef).stream().map(mapper::fromPhotoToDTO)
+                .collect(Collectors.toList());
     }
 
     public Photo getPhoto(String reference) throws MazadException {

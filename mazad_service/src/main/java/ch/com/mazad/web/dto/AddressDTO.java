@@ -33,6 +33,7 @@ public class AddressDTO
     @Size(min = 2, max = 255)
     private String postalCode;
 
+    @NotNull
     private GeoPoint location;
 
     public String getReference()

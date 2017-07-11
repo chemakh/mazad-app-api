@@ -5,8 +5,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Chemakh on 18/06/2017.
@@ -41,7 +41,7 @@ public class ArticleDTO implements Serializable
 
     private String category;
 
-    private Set<PhotoDTO> photos = new HashSet<>();
+    private List<PhotoDTO> photos = new ArrayList<>();
 
     public String getReference()
     {
@@ -157,12 +157,12 @@ public class ArticleDTO implements Serializable
         this.category = category;
     }
 
-    public Set<PhotoDTO> getPhotos()
+    public List<PhotoDTO> getPhotos()
     {
         return photos;
     }
 
-    public void setPhotos(Set<PhotoDTO> photos)
+    public void setPhotos(List<PhotoDTO> photos)
     {
         this.photos = photos;
     }
