@@ -63,6 +63,6 @@ mazad:
       service: http://localhost:8181/ws
     avatar:
       path: /home/ubuntu/workspace/mazadstorage/
-      url: http://52.59.70.73/mazadstorage
+      url: http://35.157.55.177/mazadstorage/
     swagger:
       token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbkBtYXphZC5jb20iLCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aSI6IjIwNGI1ZmQxLTU2N2QtNDEyOC1hZWZmLWI0YTkwZGIyYmFmMCIsImNsaWVudF9pZCI6Im1hemFkIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.PexCWeakSqz8_nQAoBYYQ8eHajkWJd4zhVILqkPFz3jhZ4HrcDnKlLWKi_Q95ERIQcohG1-JMyYD0EMC572M-IfLxTVI_RMVTeOzAxsafZzFUd9-GRRs0HpFDmLVALKwVeKtZgX4BPKBxuMOyF9AATlMAduq8dKN-D8s1SqknLCOzz68z4vD9wxRwhNoVFrVE48pTe6KRJMvr-v1JSFTnGbyLifXhEkFHvQqxQD6BCG8Lt4DZ7TVHxq_hPZg5AFIqqG0ipA9_LBWs9LKRqwLI3Q65TKoKlcHcBnEYGYvFKPom1MVeExUK-oo33X0AIIQDDIEGffAwSxXJGgHZKhzng

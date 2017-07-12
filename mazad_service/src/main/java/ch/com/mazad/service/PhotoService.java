@@ -84,23 +84,25 @@ public class PhotoService {
 
         if (avatar != null) {
 
-            Article article = articleRepository.findOneByReference(articleRef).
-                    orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleRef));
-
             Photo photo = new Photo();
             photo.setReference(TokenUtil.generateReference());
             photo.setLabel(avatar.getName());
             photo.setName(photo.getReference() + "." + FilenameUtils.getExtension(avatar.getOriginalFilename()));
-            photo.setArticle(article);
+            photo.setArticle(articleRef != null ? articleRepository.findOneByReference(articleRef).
+                    orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleRef)) : null);
             avatar.transferTo(new File(mazadProperties.getAvatar().getPath() + photo.getName()));
 
             photo = photoRepository.save(photo);
 
-            if (article.getAvatar() == null) {
-                article.setAvatar(photo);
-                articleRepository.save(article);
-            }
+            if (articleRef != null) {
+                Article article = articleRepository.findOneByReference(articleRef).
+                        orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleRef));
 
+                if (article.getAvatar() == null) {
+                    article.setAvatar(photo);
+                    articleRepository.save(article);
+                }
+            }
             return photo;
 
         } else
@@ -112,7 +114,7 @@ public class PhotoService {
                 MazadException.resourceNotFoundExceptionBuilder(Photo.class, reference));
     }
 
-    public List<PhotoDTO> getArticlePhotos(String articleRef)  {
+    public List<PhotoDTO> getArticlePhotos(String articleRef) {
         return photoRepository.findByArticleReference(articleRef).stream().map(mapper::fromPhotoToDTO)
                 .collect(Collectors.toList());
     }

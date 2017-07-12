@@ -17,6 +17,8 @@ public class PhotoDTO implements Serializable
 
     private String articleReference;
 
+    private String url;
+
     public String getReference() {
         return reference;
     }
@@ -47,5 +49,13 @@ public class PhotoDTO implements Serializable
 
     public void setArticleReference(String articleReference) {
         this.articleReference = articleReference;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
