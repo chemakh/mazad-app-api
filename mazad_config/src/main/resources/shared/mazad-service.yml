@@ -24,6 +24,26 @@ spring:
     cache-seconds: 1
     always-use-message-format: true
   zipkin.baseUrl: http://localhost:8085/
+  mail:
+    host: smtp.gmail.com
+    port : 587
+    username: janjoon.mailer@gmail.com
+    password: BeHappy2016!
+    protocol : smtp
+    properties:
+      mail.smtp:
+        auth: true
+        starttls.enable: true
+#        ssl.enable: true
+#        socketFactory:
+#          class: javax.net.ssl.SSLSocketFactory
+##          port: 25
+#          fallback: false
+
+  thymeleaf:
+    cache: false
+    mode: XHTML
+    prefix: mails/
 
 hystrix:
   threadpool.default:
@@ -44,6 +64,8 @@ hystrix:
 # ===================================================================
 
 mazad:
+  mail:
+    from: lazher.chemakh@gmail.com
   swagger:
     title: mazad service  API
     description: mazad Service API documentation

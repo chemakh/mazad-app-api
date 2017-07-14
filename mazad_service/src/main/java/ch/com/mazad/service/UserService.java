@@ -44,6 +44,9 @@ public class UserService
     private PhotoService photoService;
 
     @Inject
+    private MailService mailService;
+
+    @Inject
     private DTOMapper mapper;
 
 
@@ -63,7 +66,12 @@ public class UserService
         if (avatar != null)
             userDTO.setAvatar(mapper.fromPhotoToDTO(photoService.createPhoto(avatar, null)));
 
-        User user = userRepository.save(mapper.fromDTOToUser(userDTO));
+        User user = mapper.fromDTOToUser(userDTO);
+        user.setEmailKey(TokenUtil.generateCode());
+       // user =userRepository.save(user);
+
+        mailService.sendActivationEmail(userDTO,user.getEmailKey());
+
         return mapper.fromUserToDTO(user);
     }
 
