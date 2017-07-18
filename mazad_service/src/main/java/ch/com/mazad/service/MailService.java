@@ -6,6 +6,7 @@ import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -16,6 +17,8 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -72,7 +75,12 @@ public class MailService {
         Context context = new Context(locale);
 
         context.setVariable("user", user);
-        context.setVariable("code", user);
+        context.setVariable("code", code);
+        try {
+			context.setVariable("img-tel", new ClassPathResource("json/specialty.json").getFile());
+			
+		} catch (IOException e) {			
+		}
 
         String content = templateEngine.process("mail", context);
         String subject = MessageFactory.getMessage("email.activation.subject", null, user.getLangKey());

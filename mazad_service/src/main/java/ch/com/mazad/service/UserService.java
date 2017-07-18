@@ -272,4 +272,20 @@ public class UserService
         }
 
     }
+
+	public UserDTO activateRegistration(String email, String key) throws MazadException {
+		 logger.debug("Activating user for activation key {}", key);
+
+	        return userRepository.findOneByEmail(email)
+	                .filter(user -> user.getEmailKey().equals(key))
+	                .map(user ->
+	                {
+	                    user.setActivated(true);
+	                    user.setEmailKey(null);
+	                    userRepository.save(user);
+	                    logger.debug("Activated user: {}", user);
+
+	                    return mapper.fromUserToDTO(user);
+	                }).orElseThrow(() -> MazadException.invalidCodeExceptionBuilder("Email Key"));
+	}
 }

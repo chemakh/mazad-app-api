@@ -165,6 +165,22 @@ public class UserController {
     public UserDTO activateRegistration(@RequestParam(value = "key") String key) throws MazadException {
         return userService.activateRegistration(key);
     }
+    
+    @PreAuthorize("permitAll")
+    @RequestMapping(value = "activate-email",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Activate Registration Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
+            @ApiResponse(code = 400, message = "Invalid Key Value"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public UserDTO activateRegistrationByEmail(@RequestParam(value = "key") String key,
+    		@RequestParam(value = "email") String email) throws MazadException {
+        return userService.activateRegistration(email,key);
+    }
 
     @RequestMapping(value = "password/reset",
             method = RequestMethod.GET,
