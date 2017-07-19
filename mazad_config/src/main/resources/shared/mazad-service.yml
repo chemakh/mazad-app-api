@@ -31,8 +31,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port : 465
-    username: janjoon.mailer@gmail.com
-    password: BeHappy2016!
+    username: mazad.noreply@gmail.com
+    password: mazad0000
     protocol : smtp
     properties:
       mail.smtp:
@@ -82,7 +82,7 @@ mazad:
     license: Apache 2.0
     licenseUrl: http://www.apache.org/licenses/LICENSE-2.0
   admin:
-    email: lchemakh@starit.fr
+    email: mazad.noreply@gmail.com
     name: Administrateur
   security:
       authentication:

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0," />
@@ -363,13 +363,15 @@
                                                     </tr>
                                                     <tr>
                                                         <td align="left" valign="middle" width="32">
-                                                            <img src="../static/images/telephone.png" width="20" height="20"
+                                                            <img src="/../static/images/telephone.png"
+                                                                 th:src="'cid:telephone.png'"
+                                                                 width="20" height="20"
                                                                  style="margin:0; border:0; padding:0; display:block;" />
                                                         </td>
 
                                                         <td align="left"
                                                             style="color:#fff; font-family: 'Montserrat', sans-serif; font-size:14px; letter-spacing:1px;">
-                                                            +216 25 369 258
+                                                            <!--+216 25 369 258-->
                                                         </td>
 
                                                         <td width="15px">
@@ -437,8 +439,9 @@
 
                                             <tbody>
                                             <tr>
-                                                <td height="35"
-                                                    style="mso-line-height-rule: exactly; line-height: 25px;">
+                                                <td height="35" align="center"
+                                                    style="color:#a7b1b6; font-size: 24px; font-family: 'Montserrat', sans-serif; font-weight: 500; mso-line-height-rule: exactly;">
+                                                    <p th:text="${greeting}">Hello User ,</p>
                                                 </td>
                                             </tr>
 
@@ -446,6 +449,7 @@
                                             <tr>
                                                 <td align="center">
                                                     <img src="../static/images/lock.png"
+                                                         th:src="'cid:lock.png'"
                                                          style="display:block; line-height:0; font-size:0; border:0;"
                                                          border="0" alt="" />
                                                 </td>
@@ -461,7 +465,7 @@
                                             <td align="center"
                                                 style="color:#a7b1b6; font-size: 24px; font-family: 'Montserrat', sans-serif; font-weight: 500; mso-line-height-rule: exactly;">
 
-                                                RÃ©initialiser mot de passe  <p th:text="${user.email}">XXXX</p>
+                                                <p th:text="${text1}">Validate Acount</p>
 
                                                 <p th:text="${code}">YYYY</p>
 
@@ -573,8 +577,8 @@
 
                                             <tr>
                                                 <td style="color: #a1a2a5; font-size: 14px;line-height: 24px; text-align: center; font-weight: 300; font-family: 'Montserrat', sans-serif;">
-                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                                    <p th:text="${text2}"></p>
+
 
                                                 </td>
                                             </tr>

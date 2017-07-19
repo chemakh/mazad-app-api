@@ -172,7 +172,11 @@ public class UserService
                 {
                     user.setResetPasswordKey(TokenUtil.generateCode());
                     userRepository.save(user);
-                    return mapper.fromUserToDTO(user);
+                    UserDTO userDTO = mapper.fromUserToDTO(user);
+
+                    mailService.sendForgetPasswordEmail(userDTO, user.getResetPasswordKey());
+
+                    return userDTO;
                 }).orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, mail, MazadException.WITH_EMAIL));
     }
 

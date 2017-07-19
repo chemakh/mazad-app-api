@@ -17,8 +17,6 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
-import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -53,12 +51,18 @@ public class MailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
             MimeMessageHelper message;
+
             try {
                 message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
                 message.setTo(toEmail.trim());
                 message.setFrom(fromEmail);
                 message.setSubject(subject);
                 message.setText(content, isHtml);
+
+                message.addInline("lock.png", new ClassPathResource("static/images/lock.png"), "image/png");
+                message.addInline("telephone.png", new ClassPathResource("static/images/telephone.png"), "image/png");
+                
+                
                 javaMailSender.send(mimeMessage);
                 log.debug("Sent e-mail to User '{}'", toEmail);
             } catch (MessagingException e) {
@@ -76,14 +80,30 @@ public class MailService {
 
         context.setVariable("user", user);
         context.setVariable("code", code);
-        try {
-			context.setVariable("img-tel", new ClassPathResource("json/specialty.json").getFile());
-			
-		} catch (IOException e) {			
-		}
+        context.setVariable("greeting", MessageFactory.getMessage("email.activation.greeting", new String[]{user.getFirstname() + " " + user.getLastname()}, user.getLangKey()));
+        context.setVariable("text1", MessageFactory.getMessage("email.activation.text", null, user.getLangKey()));
+
 
         String content = templateEngine.process("mail", context);
         String subject = MessageFactory.getMessage("email.activation.subject", null, user.getLangKey());
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmail(user.getEmail(), subject, content, true, true);
+    }
+
+    @Async
+    public void sendForgetPasswordEmail(UserDTO user, String code) {
+        log.info("Sending Forget Password e-mail to '{}' with template Forget Email", user.getEmail());
+        Locale locale = Locale.forLanguageTag(user.getLangKey() != null && !user.getLangKey().isEmpty() ? user.getLangKey() : "fr");
+        Context context = new Context(locale);
+
+        context.setVariable("user", user);
+        context.setVariable("code", code);
+        context.setVariable("greeting", MessageFactory.getMessage("email.forget.greeting", new String[]{user.getFirstname() + " " + user.getLastname()}, user.getLangKey()));
+        context.setVariable("text1", MessageFactory.getMessage("email.forget.text1", null, user.getLangKey()));
+        context.setVariable("text2", MessageFactory.getMessage("email.forget.text2", null, user.getLangKey()));
+
+
+        String content = templateEngine.process("mail", context);
+        String subject = MessageFactory.getMessage("email.activation.subject", null, user.getLangKey());
+        sendEmail(user.getEmail(), subject, content, true, true);
     }
 }
