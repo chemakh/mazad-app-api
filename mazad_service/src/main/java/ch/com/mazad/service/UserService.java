@@ -68,7 +68,7 @@ public class UserService
 
         User user = mapper.fromDTOToUser(userDTO);
         user.setEmailKey(TokenUtil.generateCode());
-       // user =userRepository.save(user);
+        user = userRepository.save(user);
 
         mailService.sendActivationEmail(userDTO,user.getEmailKey());
 

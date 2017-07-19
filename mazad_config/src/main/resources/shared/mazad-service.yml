@@ -6,6 +6,10 @@ spring:
       enabled: true
     livereload:
       enabled: false
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
   jpa:
     database: MYSQL
     show_sql: false

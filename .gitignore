@@ -24,3 +24,6 @@ nbdist/
 .nb-gradle/
 /.idea/
 /mazad_config/target/
+/mazad.eml
+/mazad.userlibraries
+/*/mazad_*.eml
