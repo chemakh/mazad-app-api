@@ -253,7 +253,7 @@ public class UserController {
 
     }
 
-    @PreAuthorize("permitall")
+    @PreAuthorize("permitAll")
     @RequestMapping(value = "email/request/code",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
