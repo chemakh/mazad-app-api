@@ -167,7 +167,7 @@ public class UserController {
     }
     
     @PreAuthorize("permitAll")
-    @RequestMapping(value = "activate-email",
+    @RequestMapping(value = "email/activate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
