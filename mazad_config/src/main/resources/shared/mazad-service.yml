@@ -30,7 +30,7 @@ spring:
   zipkin.baseUrl: http://localhost:8085/
   mail:
     host: smtp.gmail.com
-    port : 587
+    port : 465
     username: janjoon.mailer@gmail.com
     password: BeHappy2016!
     protocol : smtp
@@ -38,7 +38,8 @@ spring:
       mail.smtp:
         auth: true
         starttls.enable: true
-#        ssl.enable: true
+        ssl.enable: true
+        ssl.trust: smtp.gmail.com
 #        socketFactory:
 #          class: javax.net.ssl.SSLSocketFactory
 ##          port: 25

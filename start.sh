@@ -16,5 +16,5 @@ sudo systemctl restart mazadConfig.service
 sudo systemctl restart mazadService.service
 sudo systemctl restart mazadAuth.service
 
-{   "address" : {     "country" : "Saudia",     "streetAddress1" : "Rue di",     "location" : {       "lat" : 0,       "lon" : 0     },     "city" : "City",     "postalCode" : "566"   },   "password" : "test",   "mobileNumber" : "7568568",   "firstname" : "Mejri",   "lastname" : "Hedi",   "sex" : "M",  
- "email" : "lchemakh@starit.fr" }
+#{   "address" : {     "country" : "Saudia",     "streetAddress1" : "Rue di",     "location" : {       "lat" : 0,       "lon" : 0     },     "city" : "City",     "postalCode" : "566"   },   "password" : "test",   "mobileNumber" : "7568568",   "firstname" : "Mejri",   "lastname" : "Hedi",   "sex" : "M",
+# "email" : "lchemakh@starit.fr" }
