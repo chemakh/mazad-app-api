@@ -206,6 +206,16 @@ public class UserService {
 
     }
 
+    public boolean requestEmailCode(String email) throws MazadException {
+        logger.debug("Reset user email ");
+        User user = userRepository.findOneByEmail(email).
+                orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, SecurityUtils.getCurrentUserLogin(), MazadException.WITH_EMAIL));
+        user.setEmailKey(TokenUtil.generateCode());
+        mailService.sendActivationEmail(mapper.fromUserToDTO(userRepository.save(user)), user.getEmailKey());
+        return true;
+
+    }
+
     public UserDTO verifyEmail(String code) throws MazadException {
         logger.debug("Verify user email with  key {}", code);
         User currentUser = getCurrentUser();
@@ -235,7 +245,7 @@ public class UserService {
             throw MazadException.actionUnauthorizedErrorBuilder();
 
         return userRepository.findOneByEmail(SecurityUtils.getCurrentUserLogin()).
-                orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, "currentUserName", MazadException.WITH_EMAIL));
+                orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, SecurityUtils.getCurrentUserLogin(), MazadException.WITH_EMAIL));
     }
 
     public void checkIfEmailIsUsed(String email, String reference) throws MazadException {

@@ -252,6 +252,25 @@ public class UserController {
         return userService.verifyEmail(code);
 
     }
+
+    @PreAuthorize("permitall")
+    @RequestMapping(value = "email/request/code",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Request Email Code Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully"),
+            @ApiResponse(code = 401, message = "Unauthorized")
+    })
+    public JSONObject requestEmailCode(String email) throws MazadException {
+
+        JSONObject result = new JSONObject();
+        userService.requestEmailCode(email);
+        result.put("result", "sent-success");
+        return result;
+    }
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "email/send",
             method = RequestMethod.GET,
@@ -279,7 +298,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
             @ApiResponse(code = 404, message = "Doctor with Ref not Found")
     })
-    public UserDTO getUserDetails(@RequestParam("reference") String reference) {
+    public UserDTO getUserDetails(@RequestParam("reference") String reference) throws MazadException {
         return userService.getUserDetails(reference);
     }
 
