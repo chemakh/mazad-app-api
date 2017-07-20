@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService
         logger.info("Authenticating the user {}", email);
         Optional<User> userFound = repository.findOneByEmail(email);
         return userFound.map(user -> {
-            if (!user.isActivated())
+            if (!user.isActivated() || !user.isMailVerified())
             {
                     throw new UserNotActivatedException("User " + email + " has not been activated yet");
             }

@@ -145,6 +145,7 @@ public class UserService {
                 .map(user ->
                 {
                     user.setActivated(true);
+                    user.setMailVerified(true);
                     user.setEmailKey(null);
                     userRepository.save(user);
                     logger.debug("Activated user: {}", user);
@@ -268,6 +269,7 @@ public class UserService {
                 .map(user ->
                 {
                     user.setActivated(true);
+                    user.setMailVerified(true);
                     user.setEmailKey(null);
                     userRepository.save(user);
                     logger.debug("Activated user: {}", user);

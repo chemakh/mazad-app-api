@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class User implements UserDetails
-{
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -42,6 +41,8 @@ public class User implements UserDetails
     @Column(name = "activated", nullable = false)
     private boolean activated = false;
 
+    @Column(name = "is_mail_verified", columnDefinition = "tinyint(1) default 0")
+    private boolean mailVerified = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
@@ -52,119 +53,105 @@ public class User implements UserDetails
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Authority> authorityList = new HashSet<>();
 
-    public String getFirstname()
-    {
+    public String getFirstname() {
         return firstname;
     }
 
-    public void setFirstname(String firstname)
-    {
+    public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
-    public String getLastname()
-    {
+    public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname)
-    {
+    public void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
-    public boolean isActivated()
-    {
+    public boolean isActivated() {
         return activated;
     }
 
-    public void setActivated(boolean activated)
-    {
+    public void setActivated(boolean activated) {
         this.activated = activated;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Set<Authority> getAuthorityList()
-    {
+    public Set<Authority> getAuthorityList() {
         return authorityList;
     }
 
-    public void setAuthorityList(Set<Authority> authorityList)
-    {
+    public void setAuthorityList(Set<Authority> authorityList) {
         this.authorityList = authorityList;
     }
 
-    public String getReference()
-    {
+    public String getReference() {
         return reference;
     }
 
-    public void setReference(String reference)
-    {
+    public void setReference(String reference) {
         this.reference = reference;
     }
 
     @Override
-    public String getUsername()
-    {
+    public String getUsername() {
         return email;
     }
 
     @Override
-    public boolean isAccountNonExpired()
-    {
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked()
-    {
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired()
-    {
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return true;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
-    {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorityList.stream().map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
     }
+
+    public boolean isMailVerified() {
+        return mailVerified;
     }
+
+    public void setMailVerified(boolean mailVerified) {
+        this.mailVerified = mailVerified;
+    }
+}

@@ -166,7 +166,6 @@ public class UserController {
         return userService.activateRegistration(key);
     }
     
-    @PreAuthorize("permitAll")
     @RequestMapping(value = "email/activate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -253,7 +252,6 @@ public class UserController {
 
     }
 
-    @PreAuthorize("permitAll")
     @RequestMapping(value = "email/request/code",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)

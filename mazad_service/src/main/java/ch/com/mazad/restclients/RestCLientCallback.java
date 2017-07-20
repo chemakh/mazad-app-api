@@ -1,5 +1,6 @@
 package ch.com.mazad.restclients;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,13 @@ public class RestCLientCallback implements UserClient {
     private UserClient userClient;
 
     @Override
+    @HystrixCommand
     public ResponseEntity<JSONObject> authenticate(String secret, String clientId, String grantType, String scope, String username, String password) {
         return userClient.authenticate(secret, clientId, grantType, scope, username, password);
     }
 
     @Override
+    @HystrixCommand
     public ResponseEntity<JSONObject> refreshToken(String secret, String clientId, String grantType, String token) {
         return userClient.refreshToken(secret, clientId, grantType, token);
     }

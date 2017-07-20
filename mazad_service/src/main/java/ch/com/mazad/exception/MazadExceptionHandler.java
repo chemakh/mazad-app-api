@@ -2,6 +2,8 @@ package ch.com.mazad.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -148,6 +150,35 @@ public class MazadExceptionHandler {
         logger.error(ex.getClass().getName(), ex);
         logger.error(errorDTO.toString());
         return errorDTO;
+    }
+
+    @ExceptionHandler(FeignException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorDTO> processFeignException(FeignException ex) {
+
+            int startIndex = ex.getMessage().indexOf("\"error_description\"") + ("\"error_description\"").length() + 2;
+            int endIndex = ex.getMessage().indexOf("\"", startIndex + 2);
+            String description = ex.getMessage().substring(startIndex, endIndex);
+            ErrorDTO errorDTO = new ErrorDTO(null, "ERR_SECURITY", description);
+            logger.error(ex.getClass().getName(), ex.getMessage());
+            logger.error(errorDTO.toString());
+            return ResponseEntity.status( ex.status()).body(errorDTO);
+    }
+
+    @ExceptionHandler(HystrixRuntimeException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorDTO> processFeignException(HystrixRuntimeException ex) {
+
+        if (ex.getCause() instanceof FeignException) {
+            int startIndex = ex.getCause().getMessage().indexOf("\"error_description\"") + ("\"error_description\"").length() + 2;
+            int endIndex = ex.getCause().getMessage().indexOf("\"", startIndex + 2);
+            String description = ex.getCause().getMessage().substring(startIndex, endIndex);
+            ErrorDTO errorDTO = new ErrorDTO(null, "ERR_SECURITY", description);
+            logger.error(ex.getCause().getClass().getName(), ex.getCause().getMessage());
+            logger.error(errorDTO.toString());
+            return ResponseEntity.status(((FeignException) ex.getCause()).status()).body(errorDTO);
+        } else
+            return ResponseEntity.badRequest().body(new ErrorDTO(null, "ERR_INTERNAL_SERVER_ERROR", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
