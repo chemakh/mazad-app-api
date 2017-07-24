@@ -240,6 +240,15 @@ public class UserService {
         return mapper.fromUserToDTO(us);
     }
 
+    public UserDTO getLoggedUser() throws MazadException {
+
+        if (!SecurityUtils.checkIfThereIsUserLogged())
+            throw MazadException.actionUnauthorizedErrorBuilder();
+
+        return userRepository.findOneByEmail(SecurityUtils.getCurrentUserLogin()).map(mapper::fromUserToDTO).
+                orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, SecurityUtils.getCurrentUserLogin(), MazadException.WITH_EMAIL));
+    }
+
     public User getCurrentUser() throws MazadException {
 
         if (!SecurityUtils.checkIfThereIsUserLogged())

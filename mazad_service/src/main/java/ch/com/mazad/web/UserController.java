@@ -95,7 +95,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden")
     })
     public UserDTO createUser(@Valid @RequestPart("user") String user, @RequestPart(value = "avatar", required = false) MultipartFile avatar) throws MazadException, IOException {
-        return userService.createUser(objectMapper.readValue(user,UserDTO.class),avatar);
+        return userService.createUser(objectMapper.readValue(user, UserDTO.class), avatar);
     }
 
     @RequestMapping(value = "",
@@ -111,8 +111,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden")
 
     })
-    public UserDTO updateUser(@Valid @RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException
-    {
+    public UserDTO updateUser(@Valid @RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException {
 
         return userService.updateUser(userDTO, reference);
     }
@@ -165,7 +164,7 @@ public class UserController {
     public UserDTO activateRegistration(@RequestParam(value = "key") String key) throws MazadException {
         return userService.activateRegistration(key);
     }
-    
+
     @RequestMapping(value = "email/activate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -177,8 +176,8 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized")
     })
     public UserDTO activateRegistrationByEmail(@RequestParam(value = "key") String key,
-    		@RequestParam(value = "email") String email) throws MazadException {
-        return userService.activateRegistration(email,key);
+                                               @RequestParam(value = "email") String email) throws MazadException {
+        return userService.activateRegistration(email, key);
     }
 
     @RequestMapping(value = "password/reset",
@@ -287,6 +286,19 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "current",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Current User Details Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
+            @ApiResponse(code = 404, message = "User with Ref not Found")
+    })
+    public UserDTO getCurrentUser() throws MazadException {
+        return userService.getLoggedUser();
+    }
+
     @RequestMapping(value = "",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -294,7 +306,7 @@ public class UserController {
     @ApiOperation(value = "Get User Details Service")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Operation Executed Successfully", response = UserDTO.class),
-            @ApiResponse(code = 404, message = "Doctor with Ref not Found")
+            @ApiResponse(code = 404, message = "User with Ref not Found")
     })
     public UserDTO getUserDetails(@RequestParam("reference") String reference) throws MazadException {
         return userService.getUserDetails(reference);
