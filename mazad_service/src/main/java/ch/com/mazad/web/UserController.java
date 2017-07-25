@@ -135,7 +135,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden")
 
     })
-    public UserDTO updateUser(@Valid @RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException {
+    public UserDTO updateUser(@RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException {
 
         return userService.updateUser(userDTO, reference);
     }
