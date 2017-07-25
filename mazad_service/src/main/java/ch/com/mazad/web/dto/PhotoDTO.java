@@ -9,7 +9,12 @@ import java.io.Serializable;
 public class PhotoDTO implements Serializable
 {
 
-    private String reference;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -352589594007654908L;
+
+	private String reference;
 
     private String label;
 

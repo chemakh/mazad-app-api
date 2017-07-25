@@ -13,7 +13,12 @@ import java.util.List;
  */
 public class ArticleDTO implements Serializable
 {
-    private String reference;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6042860173316095067L;
+
+	private String reference;
 
     @NotNull
     @Size(min = 2,max = 255)

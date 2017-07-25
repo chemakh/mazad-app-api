@@ -50,6 +50,9 @@ public class UserService {
 
 
     public UserDTO createUser(UserDTO userDTO, MultipartFile avatar) throws MazadException, IOException {
+    	
+    	if(userDTO.getPassword() == null)
+    		throw MazadException.validationErrorBuilder(new FieldErrorDTO("User","password", "must_be_not_null"));
 
         checkIfEmailIsUsed(userDTO.getEmail(), userDTO.getReference());
 

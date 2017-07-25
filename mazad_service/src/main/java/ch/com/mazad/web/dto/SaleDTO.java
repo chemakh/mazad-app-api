@@ -11,7 +11,12 @@ import java.time.LocalDateTime;
 public class SaleDTO implements Serializable
 {
 
-    private String reference;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7596633276412393609L;
+
+	private String reference;
 
     private String articleReference;
 

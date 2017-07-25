@@ -12,7 +12,12 @@ import java.time.LocalDateTime;
 public class BidDTO implements Serializable
 {
 
-    private String reference;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4205844204687786799L;
+
+	private String reference;
 
     private String articleReference;
 

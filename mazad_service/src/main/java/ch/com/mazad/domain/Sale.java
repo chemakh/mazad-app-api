@@ -15,7 +15,12 @@ import java.util.Optional;
 @Table(indexes = {@Index(name = "index_sale_reference", columnList = "reference", unique = true)})
 public class Sale implements Serializable
 {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6744219298748196922L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

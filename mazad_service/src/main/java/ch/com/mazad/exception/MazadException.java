@@ -5,7 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MazadException extends Exception {
-    private Logger logger = LoggerFactory.getLogger(MazadException.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8072531105668136904L;
+
+	private Logger logger = LoggerFactory.getLogger(MazadException.class);
 
     public static final String WITH_ID = "id";
     public static final String WITH_EMAIL = "email";
@@ -105,13 +110,13 @@ public class MazadException extends Exception {
         return ex;
     }
 
-    public static MazadException resourceNotFoundExceptionBuilder(Class object, String reference, String idType) {
+    public static MazadException resourceNotFoundExceptionBuilder(Class<?> object, String reference, String idType) {
 
         return new MazadException(MessageFactory.getMessage("mazad.exception.resource_not_found", new String[]{object.getSimpleName(), idType, reference}), MazadError.RESOURCE_NOT_FOUND, null);
 
     }
 
-    public static MazadException resourceNotFoundExceptionBuilder(Class object, String reference) {
+    public static MazadException resourceNotFoundExceptionBuilder(Class<?> object, String reference) {
 
         return new MazadException(MessageFactory.getMessage("mazad.exception.resource_not_found", new String[]{object.getSimpleName(), WITH_REF, reference}), MazadError.RESOURCE_NOT_FOUND, null);
 

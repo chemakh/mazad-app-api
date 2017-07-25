@@ -1,12 +1,14 @@
 package ch.com.mazad.web;
 
 import ch.com.mazad.domain.Bid;
+import ch.com.mazad.exception.FieldErrorDTO;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.service.ArticleService;
 import ch.com.mazad.service.BidService;
 import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.BidDTO;
 import ch.com.mazad.web.dto.PhotoDTO;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -20,9 +22,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Chemakh on 27/06/2017.
@@ -55,7 +63,23 @@ public class ArticleController {
     })
     public ArticleDTO createArticle(@RequestPart("article") String article, @RequestPart(value = "photos", required = false) List<MultipartFile> photos) throws MazadException, IOException {
 
-        return articleService.createArticle(objectMapper.readValue(article, ArticleDTO.class), photos);
+    	ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        ArticleDTO articleDTO = objectMapper.readValue(article, ArticleDTO.class);
+        final Set<ConstraintViolation<ArticleDTO>> violations = validator.validate(articleDTO);
+        
+        if (violations.size() > 0) {
+            violations.forEach(u -> System.out.println("  \"" + u.getPropertyPath().toString() + "\"" + " " + u.getMessage()));
+            
+            ConstraintViolation<ArticleDTO> violation = violations.stream().findFirst().get();
+            
+            throw MazadException.validationErrorBuilder(new FieldErrorDTO("Article", 
+            		violation.getPropertyPath().toString(),violation.getMessage()));
+            
+            
+        } 
+    	
+    	return articleService.createArticle(articleDTO, photos);
     }
 
     @PutMapping(value = "",

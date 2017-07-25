@@ -8,7 +8,12 @@ import org.springframework.security.core.AuthenticationException;
 public class UserDeletedException extends AuthenticationException
 {
 
-    public UserDeletedException(String message)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5314458450039770786L;
+
+	public UserDeletedException(String message)
     {
         super(message);
     }

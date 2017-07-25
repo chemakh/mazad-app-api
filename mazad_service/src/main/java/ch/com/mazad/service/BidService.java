@@ -73,7 +73,7 @@ public class BidService {
             return bidRepository.findByUserReference(userRef).stream().map(mapper::fromBidToDTO)
                     .collect(Collectors.toList());
         else
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
     }
 
     public JSONObject cancelBid(String reference, String referenceArticle, String refUser) throws MazadException {

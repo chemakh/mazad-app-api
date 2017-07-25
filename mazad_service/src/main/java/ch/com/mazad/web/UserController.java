@@ -1,6 +1,7 @@
 package ch.com.mazad.web;
 
 
+import ch.com.mazad.exception.FieldErrorDTO;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.restclients.RestCLientCallback;
 import ch.com.mazad.service.UserService;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import net.minidev.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +25,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import java.io.IOException;
+import java.util.Set;
 
 @Api(value = "user", description = "Operations with user", produces = "application/json")
 @RestController
@@ -95,7 +103,23 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden")
     })
     public UserDTO createUser(@Valid @RequestPart("user") String user, @RequestPart(value = "avatar", required = false) MultipartFile avatar) throws MazadException, IOException {
-        return userService.createUser(objectMapper.readValue(user, UserDTO.class), avatar);
+        
+    	ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        UserDTO userDTO = objectMapper.readValue(user, UserDTO.class);
+        final Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDTO);
+        
+        if (violations.size() > 0) {
+            violations.forEach(u -> System.out.println("  \"" + u.getPropertyPath().toString() + "\"" + " " + u.getMessage()));
+            
+            ConstraintViolation<UserDTO> violation = violations.stream().findFirst().get();
+            
+            throw MazadException.validationErrorBuilder(new FieldErrorDTO("User", violation.getPropertyPath().toString(),violation.getMessage()));
+            
+            
+        } 
+                
+    	return userService.createUser(userDTO, avatar);
     }
 
     @RequestMapping(value = "",

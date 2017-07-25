@@ -14,7 +14,12 @@ import java.io.Serializable;
 
 public class UserDTO implements Serializable
 {
-    @NotNull
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 558348605877706510L;
+
+	@NotNull
     @Size(min = 2,max = 255)
     private String firstname;
 
@@ -24,14 +29,12 @@ public class UserDTO implements Serializable
 
     private String reference;
 
-    @NotNull
     @Size(min = 2,max = 255)
     @Email
     private String email;
 
     private String mobileNumber;
 
-    @NotNull
     @Size(min = 2,max = 255)
     private String password;
 

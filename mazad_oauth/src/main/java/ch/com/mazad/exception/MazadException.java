@@ -4,7 +4,12 @@ package ch.com.mazad.exception;
 public class MazadException extends Exception
 {
 
-    private String message;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6624200413467509795L;
+
+	private String message;
 
     private Throwable cause;
 

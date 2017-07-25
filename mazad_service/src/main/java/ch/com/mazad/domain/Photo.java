@@ -13,7 +13,12 @@ import java.util.Optional;
 @Table(indexes = {@Index(name = "index_photo_reference", columnList = "reference", unique = true)})
 public class Photo implements Serializable
 {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 254542389869630929L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

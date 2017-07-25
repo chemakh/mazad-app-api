@@ -14,7 +14,12 @@ import java.util.Optional;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Authority implements Serializable
 {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6036094575800884197L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 

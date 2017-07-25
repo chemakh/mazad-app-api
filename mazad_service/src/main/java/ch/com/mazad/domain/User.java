@@ -22,7 +22,12 @@ import java.util.Set;
 @Table(indexes = {@Index(name = "index_user_reference", columnList = "reference", unique = true)})
 public class User implements Serializable
 {
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7099423699174266744L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

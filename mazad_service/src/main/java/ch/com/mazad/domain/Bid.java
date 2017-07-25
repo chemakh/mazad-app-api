@@ -16,7 +16,12 @@ import java.util.Optional;
 public class Bid implements Serializable
 {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6711288240952602931L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
