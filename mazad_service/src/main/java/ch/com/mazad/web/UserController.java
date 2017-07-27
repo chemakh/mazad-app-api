@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import net.minidev.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,12 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
+import javax.validation.*;
 import java.io.IOException;
 import java.util.Set;
 
@@ -135,7 +129,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden")
 
     })
-    public UserDTO updateUser(@RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException {
+    public UserDTO updateUser(@Valid @RequestBody UserDTO userDTO, @RequestParam("reference") String reference) throws MazadException {
 
         return userService.updateUser(userDTO, reference);
     }
@@ -168,7 +162,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden")
 
     })
-    public UserDTO updateArticleAvatar(@RequestParam("user_ref") String userRef, @RequestPart(value = "photo") MultipartFile photo) throws MazadException, IOException {
+    public UserDTO updateUserAvatar(@RequestParam("user_ref") String userRef, @RequestPart(value = "photo") MultipartFile photo) throws MazadException, IOException {
 
         return userService.updateUserAvatar(userRef, photo);
     }

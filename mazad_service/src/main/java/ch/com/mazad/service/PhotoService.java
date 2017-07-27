@@ -56,11 +56,14 @@ public class PhotoService {
             User user = userRepository.findOneByReference(userRef).
                     orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, userRef));
 
-            if (user.getAvatar() != null)
-                removePhoto(user.getAvatar());
-
+            String referenceOldAvatar = user.getAvatar() != null ? user.getAvatar().getReference() : null;
             user.setAvatar(createPhoto(avatar, null));
-            return mapper.fromUserToDTO(userRepository.save(user));
+            UserDTO userDTO = mapper.fromUserToDTO(userRepository.save(user));
+
+            if (referenceOldAvatar != null)
+                removePhoto(photoRepository.findOneByReference(referenceOldAvatar).orElse(null));
+
+            return userDTO;
         } else
             throw MazadException.validationErrorBuilder(new FieldErrorDTO("Photo", "Photo", "must_be_not_null"));
     }
@@ -74,8 +77,14 @@ public class PhotoService {
             if (article.getAvatar() != null)
                 removePhoto(article.getAvatar());
 
+            String referenceOldAvatar = article.getAvatar() != null ? article.getAvatar().getReference() : null;
             article.setAvatar(createPhoto(avatar, null));
-            return mapper.fromArticleToDTO(articleRepository.save(article));
+            ArticleDTO articleDTO = mapper.fromArticleToDTO(articleRepository.save(article));
+
+            if (referenceOldAvatar != null)
+                removePhoto(photoRepository.findOneByReference(referenceOldAvatar).orElse(null));
+
+            return articleDTO;
         } else
             throw MazadException.validationErrorBuilder(new FieldErrorDTO("Photo", "Photo", "must_be_not_null"));
     }
@@ -126,8 +135,11 @@ public class PhotoService {
 
     public void removePhoto(Photo photo) throws MazadException, IOException {
 
-        File file = new File(mazadProperties.getAvatar().getPath() + photo.getName());
-        file.delete();
-        photoRepository.delete(photo);
+        if (photo != null) {
+            File file = new File(mazadProperties.getAvatar().getPath() + photo.getName());
+            file.delete();
+            photoRepository.delete(photo);
+        }
+
     }
 }
