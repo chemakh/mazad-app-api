@@ -8,7 +8,6 @@ import ch.com.mazad.service.BidService;
 import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.BidDTO;
 import ch.com.mazad.web.dto.PhotoDTO;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -22,12 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
+import javax.validation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -177,7 +171,7 @@ public class ArticleController {
     })
     public List<BidDTO> getBid(@RequestParam(value = "reference", required = false) String reference,
                                @RequestParam("reference_article") String referenceArticle
-            , @RequestParam("reference_user") String referenceUser) throws MazadException {
+            , @RequestParam(value = "reference_user", required = false) String referenceUser) throws MazadException {
 
         return bidService.getBid(reference, referenceArticle, referenceUser);
     }

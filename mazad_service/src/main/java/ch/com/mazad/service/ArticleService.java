@@ -85,7 +85,7 @@ public class ArticleService {
     public ArticleDTO createArticle(ArticleDTO article, List<MultipartFile> avatars) throws MazadException, IOException {
 
         article.setReference(TokenUtil.generateReference());
-        article.setCurrentPrice(article.getInitialPrice());
+        article.setCurrentPrice(article.getStartingPrice());
         article.setCreationDate(LocalDateTime.now());
 
         Article ar = articleRepository.save(mapper.fromDTOToArticle(article));

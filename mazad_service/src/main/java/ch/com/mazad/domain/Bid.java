@@ -38,11 +38,11 @@ public class Bid implements Serializable
 
     private LocalDateTime creationDate;
 
-    private BigDecimal initialPrice;
+    private BigDecimal oldBid;
 
     private BigDecimal bidAmount;
 
-    private BigDecimal finalPrice;
+    private BigDecimal actualBid;
 
     public Long getId()
     {
@@ -90,16 +90,6 @@ public class Bid implements Serializable
         this.user = user;
     }
 
-    public BigDecimal getInitialPrice()
-    {
-        return initialPrice;
-    }
-
-    public void setInitialPrice(BigDecimal initialPrice)
-    {
-        this.initialPrice = initialPrice;
-    }
-
     public BigDecimal getBidAmount()
     {
         return bidAmount;
@@ -110,14 +100,20 @@ public class Bid implements Serializable
         this.bidAmount = bidAmount;
     }
 
-    public BigDecimal getFinalPrice()
-    {
-        return finalPrice;
+    public BigDecimal getOldBid() {
+        return oldBid;
     }
 
-    public void setFinalPrice(BigDecimal finalPrice)
-    {
-        this.finalPrice = finalPrice;
+    public void setOldBid(BigDecimal oldBid) {
+        this.oldBid = oldBid;
+    }
+
+    public BigDecimal getActualBid() {
+        return actualBid;
+    }
+
+    public void setActualBid(BigDecimal actualBid) {
+        this.actualBid = actualBid;
     }
 
     @Override

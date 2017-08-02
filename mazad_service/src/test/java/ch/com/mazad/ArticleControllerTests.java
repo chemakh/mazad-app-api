@@ -59,7 +59,7 @@ public class ArticleControllerTests {
         articleDTO.setCategory("bbb");
         articleDTO.setLabel("IPHONE");
         articleDTO.setCreatedByUserReference("sring");
-        articleDTO.setInitialPrice(BigDecimal.valueOf(15));
+        articleDTO.setStartingPrice(BigDecimal.valueOf(15));
         articleDTO.setDescription("barch a");
 
         byte[] json = TestUtil.convertObjectToJsonBytes(articleDTO);

@@ -13,14 +13,13 @@ import java.util.Optional;
 
 @Entity
 @Table(indexes = {@Index(name = "index_article_reference", columnList = "reference", unique = true)})
-public class Article implements Serializable
-{
+public class Article implements Serializable {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -2113432925401612713L;
+     *
+     */
+    private static final long serialVersionUID = -2113432925401612713L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -37,13 +36,17 @@ public class Article implements Serializable
 
     private LocalDateTime creationDate;
 
-    private BigDecimal initialPrice;
+    private BigDecimal startingPrice;
 
     private BigDecimal currentPrice;
 
-    private BigDecimal finalPrice;
+    private BigDecimal buyItNowPrice;
 
     private BigDecimal bidAmount;
+
+    private Integer validityDuration;
+
+    private boolean valid = true;
 
     private boolean sold;
 
@@ -59,94 +62,76 @@ public class Article implements Serializable
 
     private LocalDateTime deletionDate;
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getReference()
-    {
+    public String getReference() {
         return reference;
     }
 
-    public void setReference(String reference)
-    {
+    public void setReference(String reference) {
         this.reference = reference;
     }
 
-    public String getLabel()
-    {
+    public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label)
-    {
+    public void setLabel(String label) {
         this.label = label;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public User getCreatedBy()
-    {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy)
-    {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreationDate()
-    {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate)
-    {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public BigDecimal getInitialPrice()
-    {
-        return initialPrice;
+    public BigDecimal getStartingPrice() {
+        return startingPrice;
     }
 
-    public void setInitialPrice(BigDecimal initialPrice)
-    {
-        this.initialPrice = initialPrice;
+    public void setStartingPrice(BigDecimal startingPrice) {
+        this.startingPrice = startingPrice;
     }
 
-    public BigDecimal getCurrentPrice()
-    {
+    public BigDecimal getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(BigDecimal currentPrice)
-    {
+    public void setCurrentPrice(BigDecimal currentPrice) {
         this.currentPrice = currentPrice;
     }
 
-    public BigDecimal getFinalPrice()
-    {
-        return finalPrice;
+    public BigDecimal getBuyItNowPrice() {
+        return buyItNowPrice;
     }
 
-    public void setFinalPrice(BigDecimal finalPrice)
-    {
-        this.finalPrice = finalPrice;
+    public void setBuyItNowPrice(BigDecimal buyItNowPrice) {
+        this.buyItNowPrice = buyItNowPrice;
     }
 
     public BigDecimal getBidAmount() {
@@ -157,23 +142,19 @@ public class Article implements Serializable
         this.bidAmount = bidAmount;
     }
 
-    public boolean isSold()
-    {
+    public boolean isSold() {
         return sold;
     }
 
-    public void setSold(boolean sold)
-    {
+    public void setSold(boolean sold) {
         this.sold = sold;
     }
 
-    public Photo getAvatar()
-    {
+    public Photo getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Photo avatar)
-    {
+    public void setAvatar(Photo avatar) {
         this.avatar = avatar;
     }
 
@@ -199,6 +180,22 @@ public class Article implements Serializable
 
     public void setDeletionDate(LocalDateTime deletionDate) {
         this.deletionDate = deletionDate;
+    }
+
+    public Integer getValidityDuration() {
+        return validityDuration;
+    }
+
+    public void setValidityDuration(Integer validityDuration) {
+        this.validityDuration = validityDuration;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     @Override

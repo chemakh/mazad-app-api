@@ -32,11 +32,11 @@ public class ArticleDTO implements Serializable
 
     private LocalDateTime creationDate;
 
-    private BigDecimal initialPrice;
+    private BigDecimal startingPrice;
 
     private BigDecimal currentPrice;
 
-    private BigDecimal finalPrice;
+    private BigDecimal buyItNowPrice;
 
     private BigDecimal bidAmount;
 
@@ -96,14 +96,12 @@ public class ArticleDTO implements Serializable
         this.creationDate = creationDate;
     }
 
-    public BigDecimal getInitialPrice()
-    {
-        return initialPrice;
+    public BigDecimal getStartingPrice() {
+        return startingPrice;
     }
 
-    public void setInitialPrice(BigDecimal initialPrice)
-    {
-        this.initialPrice = initialPrice;
+    public void setStartingPrice(BigDecimal startingPrice) {
+        this.startingPrice = startingPrice;
     }
 
     public BigDecimal getCurrentPrice()
@@ -116,14 +114,12 @@ public class ArticleDTO implements Serializable
         this.currentPrice = currentPrice;
     }
 
-    public BigDecimal getFinalPrice()
-    {
-        return finalPrice;
+    public BigDecimal getBuyItNowPrice() {
+        return buyItNowPrice;
     }
 
-    public void setFinalPrice(BigDecimal finalPrice)
-    {
-        this.finalPrice = finalPrice;
+    public void setBuyItNowPrice(BigDecimal buyItNowPrice) {
+        this.buyItNowPrice = buyItNowPrice;
     }
 
     public BigDecimal getBidAmount() {

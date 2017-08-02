@@ -24,32 +24,48 @@ CREATE TABLE IF NOT EXISTS `address` (
   `street_address1` VARCHAR(255)        DEFAULT NULL,
   `street_address2` VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_gd5xjv8srxbnnqtuv9wjvrjva` (`reference`)
+  UNIQUE KEY `UK_gd5xjv8srxbnnqtuv9wjvrjva` (`reference`),
+  UNIQUE KEY `index_address_reference` (`reference`)
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 27
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
 -- Export de la structure de la table mazad. article
 CREATE TABLE IF NOT EXISTS `article` (
-  `id`            BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `created_by`    TINYBLOB,
-  `creation_date` DATETIME            DEFAULT NULL,
-  `current_price` DECIMAL(19, 2)      DEFAULT NULL,
-  `description`   VARCHAR(255)        DEFAULT NULL,
-  `final_price`   DECIMAL(19, 2)      DEFAULT NULL,
-  `initial_price` DECIMAL(19, 2)      DEFAULT NULL,
-  `label`         VARCHAR(255)        DEFAULT NULL,
-  `reference`     VARCHAR(255)        DEFAULT NULL,
-  `sold`          BIT(1)     NOT NULL,
-  `avatar_id`     BIGINT(20)          DEFAULT NULL,
+  `id`                BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `creation_date`     DATETIME            DEFAULT NULL,
+  `current_price`     DECIMAL(19, 2)      DEFAULT NULL,
+  `description`       VARCHAR(255)        DEFAULT NULL,
+  `label`             VARCHAR(255)        DEFAULT NULL,
+  `reference`         VARCHAR(255)        DEFAULT NULL,
+  `sold`              BIT(1)     NOT NULL,
+  `avatar_id`         BIGINT(20)          DEFAULT NULL,
+  `deleted`           BIT(1)     NOT NULL,
+  `deletion_date`     DATETIME            DEFAULT NULL,
+  `category_id`       BIGINT(20)          DEFAULT NULL,
+  `user_id`           BIGINT(20) NOT NULL,
+  `bid_amount`        DECIMAL(19, 2)      DEFAULT NULL,
+  `buy_it_now_price`  DECIMAL(19, 2)      DEFAULT NULL,
+  `starting_price`    DECIMAL(19, 2)      DEFAULT NULL,
+  `valid`             BIT(1)     NOT NULL,
+  `validity_duration` INT(11)             DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_rti6xu203k7hfohpu89214w6c` (`reference`),
   UNIQUE KEY `index_article_reference` (`reference`),
   KEY `FK4x9vnu2o62gw3yqrb692wtg9m` (`avatar_id`),
+  KEY `FKy5kkohbk00g0w88fi05k2hio` (`user_id`),
+  KEY `FKy5kkohbk00g0w88fi05k2hcw` (`category_id`),
   CONSTRAINT `FK4x9vnu2o62gw3yqrb692wtg9m` FOREIGN KEY (`avatar_id`) REFERENCES `photo` (`id`)
+    ON DELETE SET NULL,
+  CONSTRAINT `FKy5kkohbk00g0w88fi05k2hcw` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+  CONSTRAINT `FKy5kkohbk00g0w88fi05k2hio` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 16
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -60,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `authority` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 3
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -67,20 +84,40 @@ CREATE TABLE IF NOT EXISTS `authority` (
 CREATE TABLE IF NOT EXISTS `bid` (
   `id`            BIGINT(20) NOT NULL AUTO_INCREMENT,
   `bid_amount`    DECIMAL(19, 2)      DEFAULT NULL,
-  `final_price`   DECIMAL(19, 2)      DEFAULT NULL,
-  `initial_price` DECIMAL(19, 2)      DEFAULT NULL,
   `reference`     VARCHAR(255)        DEFAULT NULL,
   `article_id`    BIGINT(20)          DEFAULT NULL,
+  `user_id`       BIGINT(20) NOT NULL,
+  `creation_date` DATETIME            DEFAULT NULL,
+  `actual_bid`    DECIMAL(19, 2)      DEFAULT NULL,
+  `old_bid`       DECIMAL(19, 2)      DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_pskinv949oxyndma0di6xvh40` (`reference`),
   UNIQUE KEY `index_bid_reference` (`reference`),
   KEY `FK2lbh9otawlroajeyo15q0dd81` (`article_id`),
+  KEY `FK4abkntgv9nvsfi86p7kfl63au` (`user_id`),
   CONSTRAINT `FK2lbh9otawlroajeyo15q0dd81` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)
     ON DELETE CASCADE
-    ON UPDATE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK4abkntgv9nvsfi86p7kfl63au` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 6
   DEFAULT CHARSET = utf8;
+
+-- Les données exportées n'étaient pas sélectionnées.
+-- Export de la structure de la table mazad. category
+CREATE TABLE IF NOT EXISTS `category` (
+  `id`        BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `name`      VARCHAR(50)         DEFAULT NULL,
+  `reference` VARCHAR(255)        DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_9pex31vexfd5ian5g0ymemdqu` (`reference`),
+  UNIQUE KEY `index_category_reference` (`reference`)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  DEFAULT CHARSET = utf8;
+
 
 -- Les données exportées n'étaient pas sélectionnées.
 -- Export de la structure de la table mazad. photo
@@ -99,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
     ON UPDATE CASCADE
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 76
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -141,15 +179,18 @@ CREATE TABLE IF NOT EXISTS `user` (
   `sex`                VARCHAR(255)        DEFAULT NULL,
   `address_id`         BIGINT(20)          DEFAULT NULL,
   `avatar_id`          BIGINT(20)          DEFAULT NULL,
+  `mobile_number`      VARCHAR(255)        DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
   UNIQUE KEY `UK_olers6ibwn426rshksb9rh6m4` (`reference`),
+  UNIQUE KEY `index_user_reference` (`reference`),
   KEY `FKddefmvbrws3hvl5t0hnnsv8ox` (`address_id`),
   KEY `FKprb1s4tehy8cqjvuler419omm` (`avatar_id`),
   CONSTRAINT `FKddefmvbrws3hvl5t0hnnsv8ox` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`),
   CONSTRAINT `FKprb1s4tehy8cqjvuler419omm` FOREIGN KEY (`avatar_id`) REFERENCES `photo` (`id`)
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 19
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -167,10 +208,7 @@ CREATE TABLE IF NOT EXISTS `user_authority` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DELETE FROM `authority`;
-INSERT INTO `authority` (`id`, `name`) VALUES
-  (1, 'ROLE_ADMIN'),
-  (2, 'ROLE_USER');
+-- Les données exportées n'étaient pas sélectionnées.
 /*!40101 SET SQL_MODE = IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS = IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT = @OLD_CHARACTER_SET_CLIENT */;
