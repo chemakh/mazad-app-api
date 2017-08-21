@@ -44,6 +44,10 @@ public class Bid implements Serializable
 
     private BigDecimal actualBid;
 
+    private BigDecimal initialPrice;
+
+    private BigDecimal finalPrice;
+
     public Long getId()
     {
         return id;
@@ -114,6 +118,26 @@ public class Bid implements Serializable
 
     public void setActualBid(BigDecimal actualBid) {
         this.actualBid = actualBid;
+    }
+
+    public BigDecimal getInitialPrice()
+    {
+        return initialPrice;
+    }
+
+    public void setInitialPrice(BigDecimal initialPrice)
+    {
+        this.initialPrice = initialPrice;
+    }
+
+    public BigDecimal getFinalPrice()
+    {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(BigDecimal finalPrice)
+    {
+        this.finalPrice = finalPrice;
     }
 
     @Override

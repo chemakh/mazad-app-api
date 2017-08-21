@@ -102,12 +102,6 @@ public abstract class DTOMapper {
     })
     public abstract Photo fromDTOToPhoto(PhotoDTO dto);
 
-    public abstract SaleDTO fromSaleToDTO(Sale sale);
-
-    @Mappings({
-            @Mapping(target = "id", expression = "java(saleRepository.findIdByReference(dto.getReference()).orElse(BigInteger.ZERO).longValue())")
-    })
-    public abstract Sale fromDTOToSale(SaleDTO dto);
 
     public abstract AddressDTO fromAddressToDTO(Address address);
 
@@ -134,10 +128,7 @@ public abstract class DTOMapper {
     })
     public abstract void updatePhotoFromDto(PhotoDTO dto, @MappingTarget Photo photo);
 
-    @Mappings({
-            @Mapping(target = "reference", ignore = true),
-    })
-    public abstract void updateSaleFromDto(SaleDTO dto, @MappingTarget Sale sale);
+
 
     @Mappings({
             @Mapping(target = "reference", ignore = true),

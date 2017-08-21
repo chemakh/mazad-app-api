@@ -27,6 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ws/users/authenticate")
                 .antMatchers("/ws/users/get")
                 .antMatchers(HttpMethod.POST,"/ws/users")
+                .antMatchers(HttpMethod.GET, "/ws/articles")
                 .antMatchers("/ws/users/password/reset")
                 .antMatchers("/ws/users/password/reset/finish")
                 .antMatchers("/ws/users/email/request/code")

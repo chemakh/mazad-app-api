@@ -10,32 +10,28 @@ import java.util.Optional;
 /**
  * Created by Chemakh on 18/06/2017.
  */
-
 @Entity
 @Table(indexes = {@Index(name = "index_sale_reference", columnList = "reference", unique = true)})
 public class Sale implements Serializable
 {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 6744219298748196922L;
-
-	@Id
+     *
+     */
+    private static final long serialVersionUID = 6744219298748196922L;
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @Column(unique = true)
     private String reference;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bid_id")
+    private Bid bid;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "article_id")
     private Article article;
 
-    private Bid bid;
-    
     private LocalDateTime soldDate;
-
-    private User soldBy;
 
     private BigDecimal soldPrice;
 
@@ -59,16 +55,6 @@ public class Sale implements Serializable
         this.reference = reference;
     }
 
-    public Article getArticle()
-    {
-        return article;
-    }
-
-    public void setArticle(Article article)
-    {
-        this.article = article;
-    }
-
     public Bid getBid()
     {
         return bid;
@@ -89,16 +75,6 @@ public class Sale implements Serializable
         this.soldDate = soldDate;
     }
 
-    public User getSoldBy()
-    {
-        return soldBy;
-    }
-
-    public void setSoldBy(User soldBy)
-    {
-        this.soldBy = soldBy;
-    }
-
     public BigDecimal getSoldPrice()
     {
         return soldPrice;
@@ -109,17 +85,29 @@ public class Sale implements Serializable
         this.soldPrice = soldPrice;
     }
 
+    public Article getArticle()
+    {
+        return article;
+    }
+
+    public void setArticle(Article article)
+    {
+        this.article = article;
+    }
+
     @Override
-    public boolean equals(Object object) {
-        return Optional.ofNullable(object).filter(obj -> obj instanceof Sale).map(obj -> (Sale) obj).
+    public boolean equals(Object object)
+    {
+        return Optional.ofNullable(object).filter(obj -> obj instanceof Sale).map(obj -> (Sale)obj).
                 filter(ts -> this.reference == null || Objects.equals(ts.getReference(), this.reference)).
                 filter(ts -> this.reference != null || Objects.equals(ts, this)).
                 isPresent();
     }
 
     @Override
-    public int hashCode() {
-        if (this.getReference() != null)
+    public int hashCode()
+    {
+        if(this.getReference() != null)
             return this.getReference().hashCode();
         else
             return super.hashCode();
