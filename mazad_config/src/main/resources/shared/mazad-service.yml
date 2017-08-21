@@ -1,5 +1,4 @@
 spring:
-  jackson.serialization.fail-on-empty-beans: false
   application:
     name: Mazad_Service_dev
   devtools:
