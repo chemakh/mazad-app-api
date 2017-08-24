@@ -23,7 +23,7 @@ public interface BidRepository extends JpaRepository<Bid,Long> {
 
     List<Bid> findByArticleReference(String refArticle);
 
-    List<Bid> findByArticleCategoryReferenceAndUserReference(String catRef, String userRef);
+    List<Bid> findByArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldIsFalse(String catRef, String userRef);
 
     List<Bid> findByUserReference(String userRef);
 

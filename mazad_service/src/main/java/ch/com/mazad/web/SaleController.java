@@ -44,6 +44,23 @@ public class SaleController
         return saleService.createSale(bidReference,articleReference);
     }
 
+    @RequestMapping(value = "buyItNow",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Create Sale Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = SaleDTO.class),
+            @ApiResponse(code = 400, message = "Validation Error, Database conflict"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public SaleDTO buyItNow(@RequestParam("user_reference") String userReference,
+                            @RequestParam("article_reference") String articleReference) throws MazadException
+    {
+        return saleService.buyItNow(userReference, articleReference);
+    }
+
     @RequestMapping(value = "",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)

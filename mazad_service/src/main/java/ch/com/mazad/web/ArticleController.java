@@ -123,9 +123,27 @@ public class ArticleController {
     })
     public List<ArticleDTO> getArticles(@RequestParam(value = "reference", required = false) String reference,
                                         @RequestParam(value = "category_ref", required = false) String categoryRef,
+                                        @RequestParam(value = "label", required = false) String label,
                                         @RequestParam(value = "user_ref", required = false) String userRef,
                                         @RequestParam(value = "by_bid", required = false) boolean byBid) throws MazadException {
         return articleService.getArticles(reference, categoryRef, userRef, byBid);
+    }
+
+    @GetMapping(value = "bylabel",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Article Details Service")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Operation Executed Successfully", response = ArticleDTO.class),
+            @ApiResponse(code = 404, message = "Article with Ref not Found"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden")
+    })
+    public List<ArticleDTO> getArticles(@RequestParam(value = "category_ref", required = false) String categoryRef,
+                                        @RequestParam(value = "user_ref", required = false) String userRef,
+                                        @RequestParam(value = "label", required = false) String label) throws MazadException
+    {
+        return articleService.getArticles(categoryRef, userRef, label);
     }
 
     @DeleteMapping(value = "",
@@ -156,7 +174,7 @@ public class ArticleController {
     public BidDTO createBid(@Valid @RequestBody BidDTO bidDTO, @RequestParam("reference_article") String referenceArticle
             , @RequestParam("reference_user") String referenceUser) throws MazadException {
 
-        return bidService.createBid(bidDTO, referenceArticle, referenceUser);
+        return bidService.createBid(bidDTO, referenceArticle, referenceUser, false);
     }
 
     @GetMapping(value = "bids",

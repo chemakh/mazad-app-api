@@ -26,46 +26,43 @@ import java.util.stream.Collectors;
 /**
  * Created by Chemakh on 27/06/2017.
  */
-
 @Service
-public class ArticleService {
-
+public class ArticleService
+{
     private final Logger logger = LoggerFactory.getLogger(ArticleService.class);
-
     @Inject
     private ArticleRepository articleRepository;
-
     @Inject
     private BidRepository bidRepository;
-
     @Inject
     private PhotoService photoService;
-
     @Inject
     private DTOMapper mapper;
 
-    public ArticleDTO getArticleByReference(String reference) throws MazadException {
+    public ArticleDTO getArticleByReference(String reference) throws MazadException
+    {
         return articleRepository.findOneByReference(reference).map(mapper::fromArticleToDTO).
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, reference + "", MazadException.WITH_REF));
     }
 
-    public List<ArticleDTO> getArticles(String reference, String categoryRef, String userRef, boolean byBid) throws MazadException {
+    public List<ArticleDTO> getArticles(String reference, String categoryRef, String userRef, boolean byBid) throws MazadException
+    {
 
-        if (reference != null)
+        if(reference != null)
             return Collections.singletonList(getArticleByReference(reference));
-        else if (categoryRef != null && userRef != null)
-            if (!byBid)
-                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalse(categoryRef, userRef).stream().
+        else if(categoryRef != null && userRef != null)
+            if(!byBid)
+                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef, userRef).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
-                return bidRepository.findByArticleCategoryReferenceAndUserReference(categoryRef, userRef).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
+                return bidRepository.findByArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldIsFalse(categoryRef, userRef).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
                         .collect(Collectors.toList());
-        else if (categoryRef != null)
-            return articleRepository.findByCategoryReference(categoryRef).stream().
+        else if(categoryRef != null)
+            return articleRepository.findByCategoryReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef).stream().
                     map(mapper::fromArticleToDTO).collect(Collectors.toList());
-        else if (userRef != null)
-            if (!byBid)
-                return articleRepository.findByCreatedByReferenceAndDeletedIsFalse(userRef).stream().
+        else if(userRef != null)
+            if(!byBid)
+                return articleRepository.findByCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(userRef).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
                 return bidRepository.findByUserReference(userRef).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
@@ -73,38 +70,74 @@ public class ArticleService {
         else
             return articleRepository.findByDeletedIsFalseAndSoldIsFalse().stream().map(mapper::fromArticleToDTO)
                     .collect(Collectors.toList());
-
-
     }
 
-    public ArticleDTO updateArticleAvatar(String articleRef, MultipartFile avatar) throws MazadException, IOException {
+    public List<ArticleDTO> getArticles(String categoryRef, String userRef, String label) throws MazadException
+    {
+
+        if(categoryRef != null && userRef != null)
+            if(label == null || label.isEmpty())
+                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef, userRef).stream().
+                        map(mapper::fromArticleToDTO).collect(Collectors.toList());
+            else
+                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(categoryRef, userRef, label.toUpperCase()).stream().
+                        map(mapper::fromArticleToDTO).collect(Collectors.toList());
+        else if(categoryRef != null)
+            if(label == null || label.isEmpty())
+                return articleRepository.findByCategoryReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef).stream().
+                        map(mapper::fromArticleToDTO).collect(Collectors.toList());
+            else
+                return articleRepository.findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(categoryRef, label.toUpperCase()).stream().
+                        map(mapper::fromArticleToDTO).collect(Collectors.toList());
+
+        else if(userRef != null)
+            if(label == null || label.isEmpty())
+                return articleRepository.findByCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(userRef).stream().
+                        map(mapper::fromArticleToDTO).collect(Collectors.toList());
+            else
+                return articleRepository.findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(userRef, label.toUpperCase()).stream().
+                        map(mapper::fromArticleToDTO).collect(Collectors.toList());
+        else if(label == null || label.isEmpty())
+            return articleRepository.findByDeletedIsFalseAndSoldIsFalse().stream().map(mapper::fromArticleToDTO)
+                    .collect(Collectors.toList());
+        else
+            return articleRepository.findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(label.toUpperCase()).stream().map(mapper::fromArticleToDTO)
+                    .collect(Collectors.toList());
+    }
+
+    public ArticleDTO updateArticleAvatar(String articleRef, MultipartFile avatar) throws MazadException, IOException
+    {
         return photoService.createArticleAvatar(avatar, articleRef);
-
     }
 
-    public ArticleDTO createArticle(ArticleDTO article, List<MultipartFile> avatars) throws MazadException, IOException {
+    public ArticleDTO createArticle(ArticleDTO article, List<MultipartFile> avatars) throws MazadException, IOException
+    {
 
         article.setReference(TokenUtil.generateReference());
         article.setCurrentPrice(article.getStartingPrice());
         article.setCreationDate(LocalDateTime.now());
 
         Article ar = articleRepository.save(mapper.fromDTOToArticle(article));
-        if (avatars != null && !avatars.isEmpty()) {
+        if(avatars != null && !avatars.isEmpty())
+        {
 
             String reference = ar.getReference();
             avatars.forEach(av -> {
-                try {
+                try
+                {
                     photoService.createPhoto(av, reference);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     e.printStackTrace();
                 }
             });
         }
         return mapper.fromArticleToDTO(articleRepository.findOneByReference(ar.getReference()).orElse(new Article()));
-
     }
 
-    public ArticleDTO updateArticle(ArticleDTO articleDTO) throws MazadException {
+    public ArticleDTO updateArticle(ArticleDTO articleDTO) throws MazadException
+    {
 
         Article article = articleRepository.findOneByReference(articleDTO.getReference()).
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleDTO.getReference() + "", MazadException.WITH_REF));
@@ -112,10 +145,10 @@ public class ArticleService {
         mapper.updateArticleFromDto(articleDTO, article);
 
         return mapper.fromArticleToDTO(articleRepository.save(article));
-
     }
 
-    public JSONObject deleteArticle(String reference) throws MazadException {
+    public JSONObject deleteArticle(String reference) throws MazadException
+    {
 
         Article article = articleRepository.findOneByReference(reference).
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, reference + "", MazadException.WITH_REF));
@@ -129,7 +162,8 @@ public class ArticleService {
         return result;
     }
 
-    public ArticleDTO addPhoto(String articleRef, MultipartFile avatar) throws MazadException, IOException {
+    public ArticleDTO addPhoto(String articleRef, MultipartFile avatar) throws MazadException, IOException
+    {
 
         Photo photo = photoService.createPhoto(avatar, articleRef);
         ArticleDTO articleDTO = getArticleByReference(articleRef);
@@ -137,11 +171,13 @@ public class ArticleService {
         return articleDTO;
     }
 
-    public List<PhotoDTO> getPhotos(String articleRef) throws MazadException {
+    public List<PhotoDTO> getPhotos(String articleRef) throws MazadException
+    {
         return getArticleByReference(articleRef).getPhotos().stream().collect(Collectors.toList());
     }
 
-    public ArticleDTO removePhoto(String articleRef, String reference) throws MazadException, IOException {
+    public ArticleDTO removePhoto(String articleRef, String reference) throws MazadException, IOException
+    {
 
         photoService.removePhoto(photoService.getPhotoByArticle(reference, articleRef));
         return getArticleByReference(articleRef);
