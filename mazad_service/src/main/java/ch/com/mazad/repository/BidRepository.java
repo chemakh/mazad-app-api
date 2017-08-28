@@ -11,8 +11,8 @@ import java.util.Optional;
 /**
  * Created by Chemakh on 22/06/2017.
  */
-public interface BidRepository extends JpaRepository<Bid,Long> {
-
+public interface BidRepository extends JpaRepository<Bid, Long>
+{
     Optional<Bid> findOneByReference(String ref);
 
     Optional<Bid> findOneByReferenceAndArticleReference(String ref, String refArticle);
@@ -23,11 +23,13 @@ public interface BidRepository extends JpaRepository<Bid,Long> {
 
     List<Bid> findByArticleReference(String refArticle);
 
-    List<Bid> findByArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldIsFalse(String catRef, String userRef);
+    List<Bid> findByArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldAndArticleValidityDurationGreaterThan
+            (String catRef, String userRef, boolean sold, Integer zero);
+
+    List<Bid> findByUserReferenceAndArticleSold(String userRef, boolean sold);
+
+    @Query(value = "select b.id from bid b where b.reference=?1", nativeQuery = true)
+    Optional<BigInteger> findIdByReference(String ref);
 
     List<Bid> findByUserReference(String userRef);
-
-
-    @Query(value = "select b.id from bid b where b.reference=?1",nativeQuery = true)
-    Optional<BigInteger> findIdByReference(String ref);
 }

@@ -15,24 +15,26 @@ public interface ArticleRepository extends JpaRepository<Article, Long>
 {
     Optional<Article> findOneByReference(String ref);
 
-    List<Article> findByDeletedIsFalseAndSoldIsFalse();
+    List<Article> findByDeletedIsFalseAndSoldAndValidityDurationGreaterThan(boolean sold, Integer zero);
 
-    List<Article> findByCategoryReferenceAndDeletedIsFalseAndSoldIsFalse(String catRef);
+    List<Article> findByCategoryReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String catRef, boolean sold, Integer zero);
 
-    List<Article> findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(String catRef, String userRef);
+    List<Article> findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String catRef, String userRef, boolean sold, Integer zero);
 
-    List<Article> findByCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(String userRef);
+    List<Article> findByCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String userRef, boolean sold, Integer zero);
 
     @Query(value = "select art.id from article art where art.reference=?1", nativeQuery = true)
     Optional<BigInteger> findIdByReference(String ref);
 
-    List<Article> findByCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(String categoryRef, String userRef, String label);
+    List<Article> findByCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String categoryRef, String userRef, String label, boolean sold, Integer zero);
 
-    List<Article> findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(String categoryRef, String label);
+    List<Article> findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String categoryRef, String label, boolean sold, Integer zero);
 
-    List<Article> findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(String userRef, String label);
+    List<Article> findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String userRef, String label, boolean sold, Integer zero);
 
-    List<Article> findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(String label);
+    List<Article> findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String label, boolean sold, Integer zero);
 
     List<Article> findByCategoryReference(String reference);
 }

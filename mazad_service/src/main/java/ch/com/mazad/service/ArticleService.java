@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class ArticleService
 {
+    private static Integer DEFAULT_VALIDITY_DURATION = 5;
     private final Logger logger = LoggerFactory.getLogger(ArticleService.class);
     @Inject
     private ArticleRepository articleRepository;
@@ -45,63 +47,67 @@ public class ArticleService
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, reference + "", MazadException.WITH_REF));
     }
 
-    public List<ArticleDTO> getArticles(String reference, String categoryRef, String userRef, boolean byBid) throws MazadException
+    public List<ArticleDTO> getArticles(String reference, String categoryRef, String userRef, boolean byBid, boolean sold) throws MazadException
     {
 
         if(reference != null)
             return Collections.singletonList(getArticleByReference(reference));
         else if(categoryRef != null && userRef != null)
             if(!byBid)
-                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef, userRef).stream().
+                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(categoryRef, userRef, sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
-                return bidRepository.findByArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldIsFalse(categoryRef, userRef).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
+                return bidRepository.findByArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldAndArticleValidityDurationGreaterThan(categoryRef, userRef, sold, 0).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
                         .collect(Collectors.toList());
         else if(categoryRef != null)
-            return articleRepository.findByCategoryReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef).stream().
+            return articleRepository.findByCategoryReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(categoryRef, sold, 0).stream().
                     map(mapper::fromArticleToDTO).collect(Collectors.toList());
         else if(userRef != null)
             if(!byBid)
-                return articleRepository.findByCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(userRef).stream().
+                return articleRepository.findByCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(userRef, sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
-                return bidRepository.findByUserReference(userRef).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
+                return bidRepository.findByUserReferenceAndArticleSold(userRef, sold).stream().map(Bid::getArticle).distinct().map(mapper::fromArticleToDTO)
                         .collect(Collectors.toList());
         else
-            return articleRepository.findByDeletedIsFalseAndSoldIsFalse().stream().map(mapper::fromArticleToDTO)
+            return articleRepository.findByDeletedIsFalseAndSoldAndValidityDurationGreaterThan(sold, 0).stream().map(mapper::fromArticleToDTO)
                     .collect(Collectors.toList());
     }
 
-    public List<ArticleDTO> getArticles(String categoryRef, String userRef, String label) throws MazadException
+    public List<ArticleDTO> getArticles(String categoryRef, String userRef, String label, boolean sold) throws MazadException
     {
 
         if(categoryRef != null && userRef != null)
             if(label == null || label.isEmpty())
-                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef, userRef).stream().
+                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+                        (categoryRef, userRef, sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
-                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(categoryRef, userRef, label.toUpperCase()).stream().
+                return articleRepository.findByCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+                        (categoryRef, userRef, label.toUpperCase(), sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
         else if(categoryRef != null)
             if(label == null || label.isEmpty())
-                return articleRepository.findByCategoryReferenceAndDeletedIsFalseAndSoldIsFalse(categoryRef).stream().
+                return articleRepository.findByCategoryReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(categoryRef, sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
-                return articleRepository.findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(categoryRef, label.toUpperCase()).stream().
+                return articleRepository.findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+                        (categoryRef, label.toUpperCase(), sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
 
         else if(userRef != null)
             if(label == null || label.isEmpty())
-                return articleRepository.findByCreatedByReferenceAndDeletedIsFalseAndSoldIsFalse(userRef).stream().
+                return articleRepository.findByCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(userRef, sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
             else
-                return articleRepository.findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(userRef, label.toUpperCase()).stream().
+                return articleRepository.findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+                        (userRef, label.toUpperCase(), sold, 0).stream().
                         map(mapper::fromArticleToDTO).collect(Collectors.toList());
         else if(label == null || label.isEmpty())
-            return articleRepository.findByDeletedIsFalseAndSoldIsFalse().stream().map(mapper::fromArticleToDTO)
+            return articleRepository.findByDeletedIsFalseAndSoldAndValidityDurationGreaterThan(sold, 0).stream().map(mapper::fromArticleToDTO)
                     .collect(Collectors.toList());
         else
-            return articleRepository.findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldIsFalse(label.toUpperCase()).stream().map(mapper::fromArticleToDTO)
+            return articleRepository.findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(label.toUpperCase(), sold, 0).stream().map(mapper::fromArticleToDTO)
                     .collect(Collectors.toList());
     }
 
@@ -116,6 +122,7 @@ public class ArticleService
         article.setReference(TokenUtil.generateReference());
         article.setCurrentPrice(article.getStartingPrice());
         article.setCreationDate(LocalDateTime.now());
+        article.setValidityDuration(article.getValidityDuration() != null ? article.getValidityDuration() : DEFAULT_VALIDITY_DURATION);
 
         Article ar = articleRepository.save(mapper.fromDTOToArticle(article));
         if(avatars != null && !avatars.isEmpty())
@@ -143,6 +150,22 @@ public class ArticleService
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleDTO.getReference() + "", MazadException.WITH_REF));
 
         mapper.updateArticleFromDto(articleDTO, article);
+
+        return mapper.fromArticleToDTO(articleRepository.save(article));
+    }
+
+    public ArticleDTO validateArticle(String reference) throws MazadException
+    {
+
+        Article article = articleRepository.findOneByReference(reference).
+                orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, reference + "", MazadException.WITH_REF));
+
+        if(article.getCreationDate() == null)
+            article.setCreationDate(LocalDateTime.now());
+        if(((Long)Duration.between(article.getCreationDate(), LocalDateTime.now()).toDays()).compareTo(article.getValidityDuration().longValue()) > 0)
+        {
+            article.setValidityDuration(-1);
+        }
 
         return mapper.fromArticleToDTO(articleRepository.save(article));
     }

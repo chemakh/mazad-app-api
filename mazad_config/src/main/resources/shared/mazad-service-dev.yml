@@ -49,6 +49,7 @@ logging:
 # ===================================================================
 
 mazad:
+  check_validity.cron: 0 */1 * * * *
   feign:
     auth : http://localhost:7777/auth/
     service: http://localhost:8181/ws

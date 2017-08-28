@@ -45,6 +45,7 @@ public class ArticleDTO implements Serializable
     private PhotoDTO avatar;
 
     private String category;
+    private Integer validityDuration;
 
     private List<PhotoDTO> photos = new ArrayList<>();
 
@@ -166,5 +167,15 @@ public class ArticleDTO implements Serializable
     public void setPhotos(List<PhotoDTO> photos)
     {
         this.photos = photos;
+    }
+
+    public Integer getValidityDuration()
+    {
+        return validityDuration;
+    }
+
+    public void setValidityDuration(Integer validityDuration)
+    {
+        this.validityDuration = validityDuration;
     }
 }
