@@ -43,8 +43,7 @@ public class ArticleService
 
     public ArticleDTO getArticleByReference(String reference) throws MazadException
     {
-        return articleRepository.findOneByReference(reference).map(mapper::fromArticleToDTO).
-                orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, reference + "", MazadException.WITH_REF));
+        return validateArticle(reference);
     }
 
     public List<ArticleDTO> getArticles(String reference, String categoryRef, String userRef, boolean byBid, boolean sold) throws MazadException
