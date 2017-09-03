@@ -43,7 +43,7 @@ public class BidService {
         ArticleDTO articleDTO = articleService.getArticleByReference(articleRef);
         if (!articleDTO.isSold()) {
 
-            if(articleDTO.getBidAmount() != null && articleDTO.getBidAmount().compareTo(BigDecimal.ZERO) > 0 && (articleDTO.getBidAmount().compareTo(bidDTO.getBidAmount()) != 0 || buyItNow))
+            if(articleDTO.getBidAmount() != null && articleDTO.getBidAmount().compareTo(BigDecimal.ZERO) > 0 && (articleDTO.getBidAmount().compareTo(bidDTO.getBidAmount()) != 0 || !buyItNow))
                 throw MazadException.unprocessableEntityExceptionBuilder("article.bid_amount", new String[]{articleRef});
 
             bidDTO.setInitialPrice(articleDTO.getCurrentPrice());
