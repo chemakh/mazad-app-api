@@ -41,7 +41,7 @@ public class SaleController
     public SaleDTO createSale(@RequestParam("Bid_reference") String bidReference,
                            @RequestParam("article_reference") String articleReference) throws MazadException
     {
-        return saleService.createSale(bidReference,articleReference);
+        return saleService.createSale(bidReference,articleReference,false);
     }
 
     @RequestMapping(value = "buyItNow",

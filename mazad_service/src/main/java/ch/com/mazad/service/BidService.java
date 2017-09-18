@@ -33,6 +33,8 @@ public class BidService {
 
     @Inject
     private ArticleService articleService;
+    @Inject
+    private PushNotificationsService pushNotificationsService;
 
     public BidDTO createBid(BidDTO bidDTO, String articleRef, String userRef, boolean buyItNow) throws MazadException
     {
@@ -53,7 +55,9 @@ public class BidService {
             bidDTO.setUserReference(userRef);
             bidDTO.setReference(TokenUtil.generateReference());
             bidDTO.setCreationDate(LocalDateTime.now());
-            articleService.updateArticle(articleDTO);
+            articleDTO = articleService.updateArticle(articleDTO);
+            if(!buyItNow)
+                pushNotificationsService.notify(articleDTO, userRef, PushNotificationsService.BID_CREATION);
             return mapper.fromBidToDTO(bidRepository.save(mapper.fromDTOToBid(bidDTO)));
         }
 

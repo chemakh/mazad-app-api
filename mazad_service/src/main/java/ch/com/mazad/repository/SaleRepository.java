@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,6 +14,8 @@ import java.util.Optional;
 public interface SaleRepository extends JpaRepository<Sale,Long> {
 
     Optional<Sale> findOneByReference(String ref);
+
+    Sale findTopByArticleReferenceOrderBySoldDateDesc(String articlereference);
 
     @Query(value = "select b.id from sale b where b.reference=?1",nativeQuery = true)
     Optional<BigInteger> findIdByReference(String ref);

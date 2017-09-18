@@ -7,6 +7,7 @@ import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.ArticleRepository;
 import ch.com.mazad.repository.BidRepository;
 import ch.com.mazad.repository.SaleRepository;
+import ch.com.mazad.utils.DTOMapper;
 import ch.com.mazad.web.dto.BidDTO;
 import ch.com.mazad.web.dto.SaleDTO;
 import net.minidev.json.JSONObject;
@@ -36,8 +37,12 @@ public class SaleService
     private BidRepository bidRepository;
     @Inject
     private ArticleRepository articleRepository;
+    @Inject
+    private PushNotificationsService pushNotificationsService;
+    @Inject
+    private DTOMapper mapper;
 
-    public SaleDTO createSale(String bidReference, String articleReference) throws MazadException
+    public SaleDTO createSale(String bidReference, String articleReference, boolean buyItNow) throws MazadException
     {
         Bid bid = bidRepository.findOneByReference(bidReference)
                 .orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Bid.class, bidReference));
@@ -60,8 +65,11 @@ public class SaleService
         sale.setSoldPrice(bid.getFinalPrice());
         sale.setSoldDate(LocalDateTime.now());
 
-        articleRepository.save(article);
-        return fromSaleToDTO(saleRepository.save(sale));
+        article = articleRepository.save(article);
+        sale = saleRepository.save(sale);
+        if(!buyItNow)
+            pushNotificationsService.notify(mapper.fromArticleToDTO(article), article.getCreatedBy().getReference(), PushNotificationsService.SELLING_ARTICLE);
+        return fromSaleToDTO(sale);
     }
 
     public SaleDTO buyItNow(String userReference, String articleReference) throws MazadException
@@ -76,8 +84,9 @@ public class SaleService
         bidDTO.setBidAmount(article.getBuyItNowPrice().subtract(article.getCurrentPrice()));
 
         bidDTO = bidService.createBid(bidDTO, articleReference, userReference, true);
+        pushNotificationsService.notify(mapper.fromArticleToDTO(article), userReference, PushNotificationsService.BUY_IT_NOW_ARTICLE);
 
-        return createSale(bidDTO.getReference(), articleReference);
+        return createSale(bidDTO.getReference(), articleReference,true);
     }
 
     public List<SaleDTO> getSale(String reference) throws MazadException

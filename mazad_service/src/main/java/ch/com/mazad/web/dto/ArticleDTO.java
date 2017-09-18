@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,39 +15,26 @@ import java.util.List;
 public class ArticleDTO implements Serializable
 {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6042860173316095067L;
-
-	private String reference;
-
+     *
+     */
+    private static final long serialVersionUID = -6042860173316095067L;
+    private String reference;
     @NotNull
-    @Size(min = 2,max = 255)
+    @Size(min = 2, max = 255)
     private String label;
-
     @NotNull
-    @Size(min = 2,max = 255)
+    @Size(min = 2, max = 255)
     private String description;
-
     private String createdByUserReference;
-
     private LocalDateTime creationDate;
-
     private BigDecimal startingPrice;
-
     private BigDecimal currentPrice;
-
     private BigDecimal buyItNowPrice;
-
     private BigDecimal bidAmount;
-
     private boolean sold;
-
     private PhotoDTO avatar;
-
     private String category;
     private Integer validityDuration;
-
     private List<PhotoDTO> photos = new ArrayList<>();
 
     public String getReference()
@@ -79,11 +67,13 @@ public class ArticleDTO implements Serializable
         this.description = description;
     }
 
-    public String getCreatedByUserReference() {
+    public String getCreatedByUserReference()
+    {
         return createdByUserReference;
     }
 
-    public void setCreatedByUserReference(String createdByUserReference) {
+    public void setCreatedByUserReference(String createdByUserReference)
+    {
         this.createdByUserReference = createdByUserReference;
     }
 
@@ -97,11 +87,13 @@ public class ArticleDTO implements Serializable
         this.creationDate = creationDate;
     }
 
-    public BigDecimal getStartingPrice() {
+    public BigDecimal getStartingPrice()
+    {
         return startingPrice;
     }
 
-    public void setStartingPrice(BigDecimal startingPrice) {
+    public void setStartingPrice(BigDecimal startingPrice)
+    {
         this.startingPrice = startingPrice;
     }
 
@@ -115,19 +107,23 @@ public class ArticleDTO implements Serializable
         this.currentPrice = currentPrice;
     }
 
-    public BigDecimal getBuyItNowPrice() {
+    public BigDecimal getBuyItNowPrice()
+    {
         return buyItNowPrice;
     }
 
-    public void setBuyItNowPrice(BigDecimal buyItNowPrice) {
+    public void setBuyItNowPrice(BigDecimal buyItNowPrice)
+    {
         this.buyItNowPrice = buyItNowPrice;
     }
 
-    public BigDecimal getBidAmount() {
+    public BigDecimal getBidAmount()
+    {
         return bidAmount;
     }
 
-    public void setBidAmount(BigDecimal bidAmount) {
+    public void setBidAmount(BigDecimal bidAmount)
+    {
         this.bidAmount = bidAmount;
     }
 
@@ -151,11 +147,13 @@ public class ArticleDTO implements Serializable
         this.avatar = avatar;
     }
 
-    public String getCategory() {
+    public String getCategory()
+    {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(String category)
+    {
         this.category = category;
     }
 
@@ -178,4 +176,16 @@ public class ArticleDTO implements Serializable
     {
         this.validityDuration = validityDuration;
     }
+
+    public String getTimeLeft()
+    {
+        Duration duration= Duration.between(LocalDateTime.now(), this.getCreationDate().plusDays(this.getValidityDuration()));
+        long seconds = duration.getSeconds();
+        long absSeconds = Math.abs(seconds);
+        String positive = String.format(
+                "%d:%02d:%02d",
+                absSeconds / 3600,
+                (absSeconds % 3600) / 60,
+                absSeconds % 60);
+        return seconds < 0 ? "-" + positive : positive;    }
 }

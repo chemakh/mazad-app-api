@@ -93,3 +93,4 @@ mazad:
           grant_type : password
           grant_type_refresh : refresh_token
   yandex.translate.api.key: trnsl.1.1.20170328T133655Z.dc833bf21ad3c9db.3c4b93d59d48e40b18293c0dbaeab0ac79743bb2
+  firebase.api.key: AAAABi4WYik:APA91bGAKm3bWjONVBh81KSbINoCtLltBL_4Ae5cIroMmndFMZfOo_gm4RDGJpZxGM0BzWMgpjoitDk7rsZTZJfjy94bSDDlt8Sdu-Z9HZ56KfeUstgQ9A66Nvsx8L0mVEXrU7DYepQh
