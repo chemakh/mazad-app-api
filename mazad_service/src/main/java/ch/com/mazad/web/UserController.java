@@ -1,17 +1,14 @@
 package ch.com.mazad.web;
 
-
 import ch.com.mazad.exception.FieldErrorDTO;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.restclients.RestCLientCallback;
+import ch.com.mazad.service.TestService;
 import ch.com.mazad.service.UserService;
 import ch.com.mazad.web.dto.ArticleDTO;
 import ch.com.mazad.web.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.inject.Inject;
 import javax.validation.*;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 @Api(value = "user", description = "Operations with user", produces = "application/json")
@@ -52,6 +51,8 @@ public class UserController {
 
     @Inject
     private UserService userService;
+    @Inject
+    private TestService testService;
 
     @Inject
     private RestCLientCallback restCLientCallback;
@@ -329,6 +330,18 @@ public class UserController {
     public UserDTO getUserDetails(@RequestParam("reference") String reference) throws MazadException {
         return userService.getUserDetails(reference);
     }
+
+    @RequestMapping(value = "/generate",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN"})
+    public List<ArticleDTO> generateDoctors(@RequestParam("article_number") Integer number) throws IOException, MazadException
+    {
+        logger.debug("Call rest to generate ArticleDTO : {}");
+        return testService.generateFakerArticles(number);
+    }
+
 
 //    @PreAuthorize("isAuthenticated()")
 //    @RequestMapping(value = "/account/disable",
