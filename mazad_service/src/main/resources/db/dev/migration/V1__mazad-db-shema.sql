@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `address` (
   UNIQUE KEY `index_address_reference` (`reference`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 27
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   CONSTRAINT `FKy5kkohbk00g0w88fi05k2hio` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 16
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `authority` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 3
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `bid` (
   CONSTRAINT `FK4abkntgv9nvsfi86p7kfl63au` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 6
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   UNIQUE KEY `index_category_reference` (`reference`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 6
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
     ON UPDATE CASCADE
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 76
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   CONSTRAINT `FKprb1s4tehy8cqjvuler419omm` FOREIGN KEY (`avatar_id`) REFERENCES `photo` (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 19
+  AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
 -- Les données exportées n'étaient pas sélectionnées.
