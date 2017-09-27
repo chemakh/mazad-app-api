@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class TestService
 {
     private static Faker faker = new Faker();
+    private static Integer AVATAR_NUMBER = 24;
     @Inject
     private ArticleService articleService;
     @Inject
@@ -57,7 +58,7 @@ public class TestService
     private List<PhotoDTO> generateFakerAvatar()
     {
         List<Photo> photos = new ArrayList<>();
-        for (Integer i = 1; i < 11; i++)
+        for (Integer i = 1; i < AVATAR_NUMBER + 1; i++)
         {
 
             if(!photoRepository.findOneByReference("avatar" + i).isPresent())
