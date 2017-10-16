@@ -1,11 +1,10 @@
 package ch.com.mazad.service;
 
-import ch.com.mazad.domain.Article;
-import ch.com.mazad.domain.Bid;
-import ch.com.mazad.domain.Photo;
+import ch.com.mazad.domain.*;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.ArticleRepository;
 import ch.com.mazad.repository.BidRepository;
+import ch.com.mazad.security.SecurityUtils;
 import ch.com.mazad.utils.DTOMapper;
 import ch.com.mazad.utils.TokenUtil;
 import ch.com.mazad.web.dto.ArticleDTO;
@@ -43,7 +42,7 @@ public class ArticleService
 
     public ArticleDTO getArticleByReference(String reference) throws MazadException
     {
-        return validateArticle(reference);
+        return checkValidity(reference, false);
     }
 
     public List<ArticleDTO> getArticles(String reference, String categoryRef, String userRef, boolean byBid, boolean sold) throws MazadException
@@ -148,22 +147,39 @@ public class ArticleService
         Article article = articleRepository.findOneByReference(articleDTO.getReference()).
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleDTO.getReference() + "", MazadException.WITH_REF));
 
+        Integer validity = article.getValidityDuration();
+
         mapper.updateArticleFromDto(articleDTO, article);
+
+        if(article.getValidityDuration() < validity)
+            article.setValidityDuration(validity);
 
         return mapper.fromArticleToDTO(articleRepository.save(article));
     }
 
-    public ArticleDTO validateArticle(String reference) throws MazadException
+    public ArticleDTO checkValidity(String reference, boolean addCounter) throws MazadException
     {
-
         Article article = articleRepository.findOneByReference(reference).
                 orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, reference + "", MazadException.WITH_REF));
 
         if(article.getCreationDate() == null)
             article.setCreationDate(LocalDateTime.now());
-        if(((Long)Duration.between(article.getCreationDate(), LocalDateTime.now()).toDays()).compareTo(article.getValidityDuration().longValue()) > 0)
+        if(((Long)Duration.between(article.getCreationDate(), LocalDateTime.now()).toMinutes()).compareTo(article.getValidityDuration().longValue()) > 0)
         {
             article.setValidityDuration(-1);
+        }
+
+        if(addCounter)
+        {
+            if(article.getValidityDuration().compareTo(-1) == 0)
+            {
+                articleRepository.save(article);
+                throw MazadException.unprocessableEntityExceptionBuilder("article.invalide", new String[]{reference});
+            }
+            else if(new Long(article.getValidityDuration().longValue()).compareTo(Duration.between(article.getCreationDate(), LocalDateTime.now()).toMinutes()) < 4)
+            {
+                article.setValidityDuration(article.getValidityDuration() + 4);
+            }
         }
 
         return mapper.fromArticleToDTO(articleRepository.save(article));

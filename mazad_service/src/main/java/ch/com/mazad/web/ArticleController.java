@@ -104,7 +104,7 @@ public class ArticleController
     public ArticleDTO validateArticle(@RequestParam("reference") String reference) throws MazadException
     {
 
-        return articleService.validateArticle(reference);
+        return articleService.checkValidity(reference,false);
     }
 
     @PutMapping(value = "avatar",
@@ -136,7 +136,6 @@ public class ArticleController
     })
     public List<ArticleDTO> getArticles(@RequestParam(value = "reference", required = false) String reference,
                                         @RequestParam(value = "category_ref", required = false) String categoryRef,
-                                        @RequestParam(value = "label", required = false) String label,
                                         @RequestParam(value = "user_ref", required = false) String userRef,
                                         @RequestParam(value = "by_bid", required = false) boolean byBid,
                                         @RequestParam(value = "sold", required = false) boolean sold) throws MazadException

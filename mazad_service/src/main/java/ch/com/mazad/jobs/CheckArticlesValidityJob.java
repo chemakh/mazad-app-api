@@ -54,7 +54,7 @@ public class CheckArticlesValidityJob
                 .<Article, Article>chunk(1)
                 .reader(checkArticlesValidityReader())
                 .writer(items -> items.stream().filter(article -> article.getCreationDate() == null ||
-                        ((Long)Duration.between(article.getCreationDate(), LocalDateTime.now()).toDays()).compareTo(article.getValidityDuration().longValue()) > 0)
+                        ((Long)Duration.between(article.getCreationDate(), LocalDateTime.now()).toMinutes()).compareTo(article.getValidityDuration().longValue()) > 0)
                         .forEach(article -> restCLientCallback.validateArticle(article.getReference())))
                 .faultTolerant()
                 .skipLimit(10)

@@ -42,7 +42,7 @@ public class BidService {
         if(bidDTO.getBidAmount().compareTo(BigDecimal.ZERO) < 0)
             throw MazadException.unprocessableEntityExceptionBuilder("article.bid_negative", null);
 
-        ArticleDTO articleDTO = articleService.getArticleByReference(articleRef);
+        ArticleDTO articleDTO = articleService.checkValidity(articleRef,true);
         if (!articleDTO.isSold()) {
 
             if(articleDTO.getBidAmount() != null && articleDTO.getBidAmount().compareTo(BigDecimal.ZERO) > 0 && (articleDTO.getBidAmount().compareTo(bidDTO.getBidAmount()) <= 0 && !buyItNow))

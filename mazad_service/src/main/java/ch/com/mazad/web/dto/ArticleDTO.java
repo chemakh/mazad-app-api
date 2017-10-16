@@ -187,5 +187,5 @@ public class ArticleDTO implements Serializable
                 absSeconds / 3600,
                 (absSeconds % 3600) / 60,
                 absSeconds % 60);
-        return seconds < 0 ? "-" + positive : positive;    }
+        return seconds < 0 ? "00:00:00" : positive;    }
 }
