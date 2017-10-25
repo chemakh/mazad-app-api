@@ -57,6 +57,9 @@ public class Article implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     private boolean deleted;
 
@@ -196,6 +199,16 @@ public class Article implements Serializable {
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    public Region getRegion()
+    {
+        return region;
+    }
+
+    public void setRegion(Region region)
+    {
+        this.region = region;
     }
 
     @Override

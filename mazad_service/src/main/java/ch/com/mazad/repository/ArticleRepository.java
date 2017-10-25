@@ -30,11 +30,43 @@ public interface ArticleRepository extends JpaRepository<Article, Long>
     List<Article> findByCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
             (String categoryRef, String userRef, String label, boolean sold, Integer zero);
 
-    List<Article> findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String categoryRef, String label, boolean sold, Integer zero);
+    List<Article> findByCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String categoryRef, String label, boolean sold, Integer zero);
 
-    List<Article> findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String userRef, String label, boolean sold, Integer zero);
+    List<Article> findByCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String userRef, String label, boolean sold, Integer zero);
 
-    List<Article> findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan(String label, boolean sold, Integer zero);
+    List<Article> findByLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String label, boolean sold, Integer zero);
 
     List<Article> findByCategoryReference(String reference);
+
+    List<Article> findByRegionReference(String reference);
+
+    List<Article> findByRegionReferenceAndCategoryReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String categoryRef, String userRef, boolean sold, Integer zero);
+
+    List<Article> findByRegionReferenceAndCategoryReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String categoryRef, boolean sold, Integer zero);
+
+    List<Article> findByRegionReferenceAndCreatedByReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String userRef, boolean sold, Integer zero);
+
+    List<Article> findByRegionReferenceAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, boolean sold, int i);
+
+    List<Article> findByRegionReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String label, boolean sold, Integer zero);
+
+    List<Article> findByRegionReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String userRef, String label, boolean sold, Integer zero);
+
+    List<Article> findByRegionReferenceAndCategoryReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String categoryRef, String label, boolean sold, Integer integer);
+
+    List<Article> findByRegionReferenceAndCategoryReferenceAndCreatedByReferenceAndLabelIgnoreCaseContainingAndDeletedIsFalseAndSoldAndValidityDurationGreaterThan
+            (String regionRef, String categoryRef, String userRef, String label, boolean sold, Integer zero);
+
+    @Query(value = "SELECT bid.article_id FROM bid GROUP BY bid.article_id ORDER by COUNT(bid.id)", nativeQuery = true)
+    List<BigInteger> findMostRequestedArticles();
 }

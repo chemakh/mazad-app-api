@@ -5,10 +5,7 @@ import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.*;
 import ch.com.mazad.service.PhotoService;
 import ch.com.mazad.web.dto.*;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Inject;
@@ -21,41 +18,34 @@ import java.math.BigInteger;
         BigInteger.class,
         Value.class
 })
-public abstract class DTOMapper {
-
+public abstract class DTOMapper
+{
     @Inject
     ArticleRepository articleRepository;
-
     @Inject
     PhotoService photoService;
-
     @Inject
     CategoryRepository categoryRepository;
-
     @Inject
     BidRepository bidRepository;
-
     @Inject
     PhotoRepository photoRepository;
-
     @Inject
     SaleRepository saleRepository;
-
     @Inject
     UserRepository userRepository;
-
     @Inject
     AddressRepository addressRepository;
-
+    @Inject
+    RegionRepository regionRepository;
     @Value("${mazad.avatar.url}")
     String baseUrl;
-
-
 
     @Mappings({
             @Mapping(target = "createdByUserReference", source = "article.createdBy.reference"),
             @Mapping(target = "category", source = "article.category.name"),
-           @Mapping(target = "photos", expression = "java(photoService.getArticlePhotos(article.getReference()))"),
+            @Mapping(target = "referenceRegion", source = "article.region.reference"),
+            @Mapping(target = "photos", expression = "java(photoService.getArticlePhotos(article.getReference()))"),
             @Mapping(target = "validityDuration", expression = "java(article.getValidityDuration() / 1440)")
     })
     public abstract ArticleDTO fromArticleToDTO(Article article);
@@ -63,6 +53,7 @@ public abstract class DTOMapper {
     @Mappings({
             @Mapping(target = "createdBy", expression = "java(userRepository.findOneByReference(dto.getCreatedByUserReference()).orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, dto.getCreatedByUserReference())))"),
             @Mapping(target = "category", expression = "java(categoryRepository.findOneByName(dto.getCategory()).orElse(null))"),
+            @Mapping(target = "region", expression = "java(regionRepository.findOneByReference(dto.getReferenceRegion()).orElse(null))"),
             @Mapping(target = "id", expression = "java(articleRepository.findIdByReference(dto.getReference()).orElse(BigInteger.ZERO).longValue())"),
             @Mapping(target = "validityDuration", expression = "java(dto.getValidityDuration() * 1440)")
     })
@@ -75,7 +66,7 @@ public abstract class DTOMapper {
 
     @Mappings({
             @Mapping(target = "id", expression = "java(userRepository.findIdByReference(dto.getReference()).orElse(BigInteger.ZERO).longValue())"),
-                @Mapping(target = "address", expression = "java(fromDTOToAddress(dto.getAddress()))")
+            @Mapping(target = "address", expression = "java(fromDTOToAddress(dto.getAddress()))")
     })
     public abstract User fromDTOToUser(UserDTO dto);
 
@@ -104,7 +95,6 @@ public abstract class DTOMapper {
     })
     public abstract Photo fromDTOToPhoto(PhotoDTO dto);
 
-
     public abstract AddressDTO fromAddressToDTO(Address address);
 
     @Mappings({
@@ -130,13 +120,12 @@ public abstract class DTOMapper {
     })
     public abstract void updatePhotoFromDto(PhotoDTO dto, @MappingTarget Photo photo);
 
-
-
     @Mappings({
             @Mapping(target = "reference", ignore = true),
             @Mapping(target = "avatar", ignore = true),
             @Mapping(target = "creationDate", ignore = true),
             @Mapping(target = "category", expression = "java(categoryRepository.findOneByName(dto.getCategory()).orElse(null))"),
+            @Mapping(target = "region", expression = "java(regionRepository.findOneByReference(dto.getReferenceRegion()).orElse(null))"),
             @Mapping(target = "validityDuration", expression = "java(dto.getValidityDuration() * 1440)")
     })
     public abstract void updateArticleFromDto(ArticleDTO dto, @MappingTarget Article article);
@@ -144,6 +133,4 @@ public abstract class DTOMapper {
     @Mappings({
             @Mapping(target = "reference", ignore = true)})
     public abstract void updateAddressFromDto(AddressDTO dto, @MappingTarget Address address);
-
-
 }

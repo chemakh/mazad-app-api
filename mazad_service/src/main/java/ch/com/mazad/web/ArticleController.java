@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.inject.Inject;
 import javax.validation.*;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -104,7 +106,7 @@ public class ArticleController
     public ArticleDTO validateArticle(@RequestParam("reference") String reference) throws MazadException
     {
 
-        return articleService.checkValidity(reference,false);
+        return articleService.checkValidity(reference, false);
     }
 
     @PutMapping(value = "avatar",
@@ -136,11 +138,15 @@ public class ArticleController
     })
     public List<ArticleDTO> getArticles(@RequestParam(value = "reference", required = false) String reference,
                                         @RequestParam(value = "category_ref", required = false) String categoryRef,
+                                        @RequestParam(value = "region_ref", required = false) String regionRef,
+                                        @RequestParam(value = "price", required = false) BigDecimal price,
+                                        @RequestParam(value = "creation_date", required = false) LocalDate creationDate,
                                         @RequestParam(value = "user_ref", required = false) String userRef,
+                                        @RequestParam(value = "most_requested", required = false) boolean mostRequested,
                                         @RequestParam(value = "by_bid", required = false) boolean byBid,
                                         @RequestParam(value = "sold", required = false) boolean sold) throws MazadException
     {
-        return articleService.getArticles(reference, categoryRef, userRef, byBid, sold);
+        return articleService.getArticles(reference, categoryRef, regionRef, userRef, price, creationDate, mostRequested, byBid, sold);
     }
 
     @GetMapping(value = "bylabel",
@@ -153,12 +159,17 @@ public class ArticleController
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden")
     })
-    public List<ArticleDTO> getArticles(@RequestParam(value = "category_ref", required = false) String categoryRef,
+    public List<ArticleDTO> getArticles(
+            @RequestParam(value = "category_ref", required = false) String categoryRef,
                                         @RequestParam(value = "user_ref", required = false) String userRef,
+            @RequestParam(value = "region_ref", required = false) String regionRef,
+            @RequestParam(value = "price", required = false) BigDecimal price,
+            @RequestParam(value = "creation_date", required = false) LocalDate creationDate,
+            @RequestParam(value = "most_requested", required = false) boolean mostRequested,
                                         @RequestParam(value = "label", required = false) String label,
                                         @RequestParam(value = "sold", required = false) boolean sold) throws MazadException
     {
-        return articleService.getArticles(categoryRef, userRef, label, sold);
+        return articleService.getArticles(categoryRef, regionRef, userRef, label, price, creationDate, mostRequested, sold);
     }
 
     @DeleteMapping(value = "",

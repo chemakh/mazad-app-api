@@ -32,4 +32,9 @@ public interface BidRepository extends JpaRepository<Bid, Long>
     Optional<BigInteger> findIdByReference(String ref);
 
     List<Bid> findByUserReference(String userRef);
+
+    List<Bid> findByArticleRegionReferenceAndArticleCategoryReferenceAndUserReferenceAndArticleDeletedIsFalseAndArticleSoldAndArticleValidityDurationGreaterThan
+            (String regionRef, String categoryRef, String userRef, boolean sold, Integer zero);
+
+    List<Bid> findByArticleRegionReferenceAndUserReferenceAndArticleSold(String regionRef, String userRef, boolean sold);
 }

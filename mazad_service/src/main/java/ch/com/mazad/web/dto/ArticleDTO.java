@@ -34,6 +34,7 @@ public class ArticleDTO implements Serializable
     private boolean sold;
     private PhotoDTO avatar;
     private String category;
+    private String referenceRegion;
     private Integer validityDuration;
     private List<PhotoDTO> photos = new ArrayList<>();
 
@@ -155,6 +156,16 @@ public class ArticleDTO implements Serializable
     public void setCategory(String category)
     {
         this.category = category;
+    }
+
+    public String getReferenceRegion()
+    {
+        return referenceRegion;
+    }
+
+    public void setReferenceRegion(String referenceRegion)
+    {
+        this.referenceRegion = referenceRegion;
     }
 
     public List<PhotoDTO> getPhotos()
