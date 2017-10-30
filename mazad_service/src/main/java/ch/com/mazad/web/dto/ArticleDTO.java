@@ -188,15 +188,10 @@ public class ArticleDTO implements Serializable
         this.validityDuration = validityDuration;
     }
 
-    public String getTimeLeft()
+    public Integer getTimeLeft()
     {
-        Duration duration= Duration.between(LocalDateTime.now(), this.getCreationDate().plusDays(this.getValidityDuration()));
-        long seconds = duration.getSeconds();
-        long absSeconds = Math.abs(seconds);
-        String positive = String.format(
-                "%d:%02d:%02d",
-                absSeconds / 3600,
-                (absSeconds % 3600) / 60,
-                absSeconds % 60);
-        return seconds < 0 ? "00:00:00" : positive;    }
+        Duration duration = Duration.between(LocalDateTime.now(), this.getCreationDate().plusDays(this.getValidityDuration()));
+        Long seconds = duration.getSeconds();
+        return seconds < 0 ? 0 : seconds.intValue() / 60;
+    }
 }
