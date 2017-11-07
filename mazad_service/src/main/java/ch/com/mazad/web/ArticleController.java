@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiResponses;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -140,7 +141,7 @@ public class ArticleController
                                         @RequestParam(value = "category_ref", required = false) String categoryRef,
                                         @RequestParam(value = "region_ref", required = false) String regionRef,
                                         @RequestParam(value = "price", required = false) BigDecimal price,
-                                        @RequestParam(value = "creation_date", required = false) LocalDate creationDate,
+                                        @RequestParam(value = "creation_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate creationDate,
                                         @RequestParam(value = "user_ref", required = false) String userRef,
                                         @RequestParam(value = "most_requested", required = false) boolean mostRequested,
                                         @RequestParam(value = "by_bid", required = false) boolean byBid,
@@ -164,7 +165,7 @@ public class ArticleController
                                         @RequestParam(value = "user_ref", required = false) String userRef,
             @RequestParam(value = "region_ref", required = false) String regionRef,
             @RequestParam(value = "price", required = false) BigDecimal price,
-            @RequestParam(value = "creation_date", required = false) LocalDate creationDate,
+            @RequestParam(value = "creation_date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate creationDate,
             @RequestParam(value = "most_requested", required = false) boolean mostRequested,
                                         @RequestParam(value = "label", required = false) String label,
                                         @RequestParam(value = "sold", required = false) boolean sold) throws MazadException
