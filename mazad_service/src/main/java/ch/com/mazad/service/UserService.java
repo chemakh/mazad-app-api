@@ -70,9 +70,10 @@ public class UserService {
 
         User user = mapper.fromDTOToUser(userDTO);
         user.setEmailKey(TokenUtil.generateCode());
+        user.setActivated(true);
         user = userRepository.save(user);
 
-        mailService.sendActivationEmail(userDTO, user.getEmailKey());
+        // mailService.sendActivationEmail(userDTO, user.getEmailKey());
 
         return mapper.fromUserToDTO(user);
     }
