@@ -22,6 +22,10 @@ public class Category {
     @Column(unique = true)
     private String reference;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "avatar_id")
+    private Photo avatar;
+
     public long getId() {
         return id;
     }
@@ -44,6 +48,14 @@ public class Category {
 
     public void setReference(String reference) {
         this.reference = reference;
+    }
+
+    public Photo getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Photo avatar) {
+        this.avatar = avatar;
     }
 
     @Override

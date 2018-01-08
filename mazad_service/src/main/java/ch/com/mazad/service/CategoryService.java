@@ -9,8 +9,10 @@ import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,10 +32,19 @@ public class CategoryService {
     @Inject
     private ArticleRepository articleRepository;
 
-    public Category createCategory(Category category) {
+    @Inject
+    private PhotoService photoService;
+
+    public Category createCategory(Category category, MultipartFile avatar) throws MazadException, IOException {
 
         category.setReference(TokenUtil.generateReference());
+        if (avatar != null)
+            category.setAvatar(photoService.createPhoto("Category", avatar, null));
         return categoryRepository.save(category);
+    }
+
+    public Category updateCategoryAvatar(String categoryRef, MultipartFile avatar) throws MazadException, IOException {
+        return photoService.createCategoryAvatar(avatar, categoryRef);
     }
 
     public Category updateCategory(Category category, String reference) throws MazadException {

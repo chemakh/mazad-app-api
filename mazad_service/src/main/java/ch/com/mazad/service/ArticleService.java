@@ -195,7 +195,7 @@ public class ArticleService
             avatars.forEach(av -> {
                 try
                 {
-                    photoService.createPhoto(av, reference);
+                    photoService.createPhoto("Article", av, reference);
                 }
                 catch (Exception e)
                 {
@@ -268,7 +268,7 @@ public class ArticleService
     public ArticleDTO addPhoto(String articleRef, MultipartFile avatar) throws MazadException, IOException
     {
 
-        Photo photo = photoService.createPhoto(avatar, articleRef);
+        Photo photo = photoService.createPhoto("Article", avatar, articleRef);
         ArticleDTO articleDTO = getArticleByReference(articleRef);
         articleDTO.getPhotos().add(mapper.fromPhotoToDTO(photo));
         return articleDTO;

@@ -60,7 +60,7 @@ public class UserService
         userDTO.setReference(TokenUtil.generateReference());
 
         if(avatar != null)
-            userDTO.setAvatar(mapper.fromPhotoToDTO(photoService.createPhoto(avatar, null)));
+            userDTO.setAvatar(mapper.fromPhotoToDTO(photoService.createPhoto("User", avatar, null)));
 
         User user = mapper.fromDTOToUser(userDTO);
         user.setEmailKey(TokenUtil.generateCode());

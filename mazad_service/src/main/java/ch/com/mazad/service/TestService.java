@@ -48,7 +48,7 @@ public class TestService
 
         for (Integer i = 0; i < number; i++)
         {
-            ArticleDTO article = createFakerArticle(user, photos.get(i % photos.size()), categories.get(i % categories.size()).getName());
+            ArticleDTO article = createFakerArticle(user, photos.get(i % photos.size()), categories.get(i % categories.size()).getName(), (i & 1) == 0);
             articles.add(article);
         }
 
@@ -75,7 +75,7 @@ public class TestService
         return photos.stream().map(mapper::fromPhotoToDTO).collect(Collectors.toList());
     }
 
-    private ArticleDTO createFakerArticle(UserDTO createdBy, PhotoDTO photoDTO, String cat) throws MazadException, IOException
+    private ArticleDTO createFakerArticle(UserDTO createdBy, PhotoDTO photoDTO, String cat, boolean withBidAmount) throws MazadException, IOException
     {
 
         ArticleDTO articleDTO = new ArticleDTO();
@@ -88,6 +88,7 @@ public class TestService
         articleDTO.setCategory(cat);
         articleDTO.setDescription(faker.lorem().paragraph());
         articleDTO.setStartingPrice(new BigDecimal(faker.number().randomNumber(3, true)));
+        articleDTO.setBidAmount(withBidAmount ? new BigDecimal(faker.number().randomNumber(3, true)) : BigDecimal.ZERO);
 
         return articleService.createArticle(articleDTO, null);
     }

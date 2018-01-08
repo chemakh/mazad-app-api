@@ -2,11 +2,13 @@ package ch.com.mazad.service;
 
 import ch.com.mazad.config.MazadProperties;
 import ch.com.mazad.domain.Article;
+import ch.com.mazad.domain.Category;
 import ch.com.mazad.domain.Photo;
 import ch.com.mazad.domain.User;
 import ch.com.mazad.exception.FieldErrorDTO;
 import ch.com.mazad.exception.MazadException;
 import ch.com.mazad.repository.ArticleRepository;
+import ch.com.mazad.repository.CategoryRepository;
 import ch.com.mazad.repository.PhotoRepository;
 import ch.com.mazad.repository.UserRepository;
 import ch.com.mazad.utils.DTOMapper;
@@ -45,6 +47,9 @@ public class PhotoService {
     private UserRepository userRepository;
 
     @Inject
+    private CategoryRepository categoryRepository;
+
+    @Inject
     private ArticleRepository articleRepository;
 
     @Inject
@@ -57,7 +62,7 @@ public class PhotoService {
                     orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(User.class, userRef));
 
             String referenceOldAvatar = user.getAvatar() != null ? user.getAvatar().getReference() : null;
-            user.setAvatar(createPhoto(avatar, null));
+            user.setAvatar(createPhoto("User", avatar, null));
             UserDTO userDTO = mapper.fromUserToDTO(userRepository.save(user));
 
             if (referenceOldAvatar != null)
@@ -74,11 +79,8 @@ public class PhotoService {
             Article article = articleRepository.findOneByReference(articleRef).
                     orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleRef));
 
-            if (article.getAvatar() != null)
-                removePhoto(article.getAvatar());
-
             String referenceOldAvatar = article.getAvatar() != null ? article.getAvatar().getReference() : null;
-            article.setAvatar(createPhoto(avatar, null));
+            article.setAvatar(createPhoto("Article", avatar, null));
             ArticleDTO articleDTO = mapper.fromArticleToDTO(articleRepository.save(article));
 
             if (referenceOldAvatar != null)
@@ -89,13 +91,31 @@ public class PhotoService {
             throw MazadException.validationErrorBuilder(new FieldErrorDTO("Photo", "Photo", "must_be_not_null"));
     }
 
-    public Photo createPhoto(MultipartFile avatar, String articleRef) throws MazadException, IOException {
+    public Category createCategoryAvatar(MultipartFile avatar, String categoryRef) throws IOException, MazadException {
+        if (avatar != null) {
+
+            Category category = categoryRepository.findOneByReference(categoryRef).
+                    orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Category.class, categoryRef));
+
+            String referenceOldAvatar = category.getAvatar() != null ? category.getAvatar().getReference() : null;
+            category.setAvatar(createPhoto("Category", avatar, null));
+            category = categoryRepository.save(category);
+
+            if (referenceOldAvatar != null)
+                removePhoto(photoRepository.findOneByReference(referenceOldAvatar).orElse(null));
+
+            return category;
+        } else
+            throw MazadException.validationErrorBuilder(new FieldErrorDTO("Photo", "Photo", "must_be_not_null"));
+    }
+
+    public Photo createPhoto(String type, MultipartFile avatar, String articleRef) throws MazadException, IOException {
 
         if (avatar != null) {
 
             Photo photo = new Photo();
             photo.setReference(TokenUtil.generateReference());
-            photo.setLabel(avatar.getName());
+            photo.setLabel(type + "-" + avatar.getName());
             photo.setName(photo.getReference() + "." + FilenameUtils.getExtension(avatar.getOriginalFilename()));
             photo.setArticle(articleRef != null ? articleRepository.findOneByReference(articleRef).
                     orElseThrow(() -> MazadException.resourceNotFoundExceptionBuilder(Article.class, articleRef)) : null);
